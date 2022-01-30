@@ -22,6 +22,7 @@ float readTemp(float val)
 void setup()
 {
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+    display.display();
 
     for (int i = 0; i < BUFFSIZE; ++i)
     {
