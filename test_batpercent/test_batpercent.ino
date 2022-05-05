@@ -1,5 +1,7 @@
 #include <Adafruit_SSD1306.h>
 
+// https://stackoverflow.com/questions/56266857/
+
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
 float bat_read(int bat_pin, const float bat_min, const float bat_max)
