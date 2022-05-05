@@ -5,6 +5,7 @@ Adafruit_SSD1306 display(128, 64, &Wire, -1);
 void setup()
 {
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+    display.display();
 }
 
 void loop()
@@ -13,14 +14,8 @@ void loop()
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
     
-    display.setTextSize(3);
-    display.println("bla");
-    
     display.setTextSize(2);
-    display.println("ble");
-    
-    display.setTextSize(1);
-    display.println("blie");
+    display.println("1234567890");
     
     display.display();
     
