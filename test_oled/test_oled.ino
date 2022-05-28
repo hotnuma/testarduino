@@ -15,7 +15,7 @@ void loop()
     display.setCursor(0, 0);
     
     display.setTextSize(2);
-    display.println("1234567890");
+    display.println("12345678901234567890");
     
     display.display();
     
