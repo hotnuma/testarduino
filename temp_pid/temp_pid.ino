@@ -1,4 +1,5 @@
 #include <Adafruit_SSD1306.h>
+#include <PID_v1.h>
 
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
@@ -12,13 +13,20 @@ const double RT25 = 10000.0;
 const double R = 5600.0;
 const double B = 3950.0;
 
-const int PWM_PIN = 3;
+#define PIN_PWM 3
+double setpoint;
+double input;
+double output;
+double Kp=7;
+double Ki=0.1;
+double Kd=0;
+
+PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
 
 double readTemp(int val)
 {
     return (1 / ( (1 / T25) + (1 / B) * log( (R / RT25) * ((1024.0 / val) - 1))) - 273.15);
 }
-
 
 void setup()
 {
@@ -31,8 +39,14 @@ void setup()
         sum += buff[i];
         delay(100);
     }
-
-    pinMode(PWM_PIN, OUTPUT);
+    
+    input = sum / BUFFSIZE;
+    setpoint = 512;
+    
+    // turn the PID on
+    myPID.SetMode(AUTOMATIC);
+    
+    pinMode(PIN_PWM, OUTPUT);
 }
 
 void loop()
@@ -44,18 +58,31 @@ void loop()
     sum = sum + val;
     index = (index+1) % BUFFSIZE;
     
-    double temp = readTemp(sum / BUFFSIZE);
+    int avg = sum / BUFFSIZE;
+    double temp = readTemp(avg);
 
     display.clearDisplay();
     display.setTextSize(2);
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
+    
     display.print("Te ");
     display.print(temp);
     display.println(" C");
+    
+    display.print("avg ");
+    display.println(avg);
+
+    input = avg;
+    myPID.Compute();
+    
+    display.print("pwm ");
+    display.println(output);
+    
+    //analogWrite(PIN_OUTPUT, Output);
+    analogWrite(PIN_PWM, output);
+    
     display.display();
-    
-    analogWrite(PWM_PIN, 140);
-    
-    delay(500);
+
+    delay(100);
 }
