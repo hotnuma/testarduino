@@ -2,11 +2,13 @@
 
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
+const int vref = 5.0;
+
 void setup()
 {
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 
-    analogReference(EXTERNAL);
+    //analogReference(EXTERNAL);
 }
 
 void loop()
@@ -15,15 +17,16 @@ void loop()
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
 
-    display.setTextSize(3);
+    display.setTextSize(2);
     
-    int val = analogRead(A0);
+    int adc = analogRead(A0);
     
-    display.println(val);
+    display.println(adc);
 
-    float V = (val * 3.3) / 1023.0;
+    double val = (adc * vref) / 1023.0;
     
-    display.println(V);
+    display.print(val);
+    display.println(" V");
 
     display.display();
     
