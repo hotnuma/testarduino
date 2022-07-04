@@ -23,7 +23,7 @@ void loop()
     
     display.println(adc);
 
-    double val = (adc * vref) / 1023.0;
+    double val = (adc * vref) / 1024.0;
     
     display.print(val);
     display.println(" V");

@@ -1,23 +1,29 @@
 #include <Adafruit_SSD1306.h>
-#include "ArduPID.h"
+#include <PID_v1.h>
 
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
-ArduPID myPID;
 
-double input;
-double output;
-double setpoint = 512;
-
-double Kp=2;
-double Ki=1;
-double Kd=1;
-
-const int PIN_PWM = 3;
+#define BUFFSIZE 5
+int index = 0;
+int buff[BUFFSIZE] = {0};
+int sum = 0;
 
 const double T25 = 25 + 273.15;
 const double RT25 = 10000.0;
 const double R = 5600.0;
 const double B = 3950.0;
+
+#define PIN_PWM 3
+
+double setpoint;
+double input;
+double output;
+
+double Kp=3;
+double Ki=0.25;
+double Kd=5;
+
+PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
 
 double readTemp(int val)
 {
@@ -29,23 +35,20 @@ void setup()
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
     display.display();
 
-    pinMode(PIN_PWM, OUTPUT);
-
     input = analogRead(A0);
     
-    myPID.begin(&input, &output, &setpoint, Kp, Ki, Kd);
+    setpoint = 512;
     
-    myPID.setOutputLimits(0, 255);
-    myPID.setBias(255.0 / 2.0);
-    myPID.setWindUpLimits(-20, 20);
+    // turn the PID on
+    myPID.SetMode(AUTOMATIC);
     
-    myPID.start();
+    pinMode(PIN_PWM, OUTPUT);
 }
 
 void loop()
 {
     input = analogRead(A0);
-    myPID.compute();
+    myPID.Compute();
     analogWrite(PIN_PWM, output);
     
     double temp = readTemp(input);
@@ -67,5 +70,5 @@ void loop()
     
     display.display();
 
-    //delay(100);
+    delay(100);
 }
