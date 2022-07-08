@@ -9,9 +9,9 @@ int buff[BUFFSIZE] = {0};
 int sum = 0;
 
 const double T25 = 25 + 273.15;
-const double RT25 = 10000.0;
+const double RT0 = 10000.0;
 const double R = 5600.0;
-const double B = 3950.0;
+const double beta = 3950.0;
 
 #define PIN_PWM 3
 
@@ -25,9 +25,14 @@ double Kd=5;
 
 PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
 
-double readTemp(int val)
+double calcRt(int val)
 {
-    return (1 / ( (1 / T25) + (1 / B) * log( (R / RT25) * ((1024.0 / val) - 1))) - 273.15);
+    return R * ((1024.0 / val) - 1);
+}
+
+double readTemp(double Rt)
+{
+    return (1 / ((1 / T25) + (1 / beta) * log(Rt / RT0)) - 273.15);
 }
 
 void setup()
@@ -51,7 +56,7 @@ void loop()
     myPID.Compute();
     analogWrite(PIN_PWM, output);
     
-    double temp = readTemp(input);
+    double temp = readTemp(calcRt(input));
 
     display.clearDisplay();
     display.setTextSize(2);
