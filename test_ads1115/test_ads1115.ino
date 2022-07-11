@@ -30,6 +30,7 @@ void setup()
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
     display.clearDisplay(); 
     
+    ads.setGain(GAIN_ONE);
     ads.begin();
 
     uint16_t adc0 = ads.readADC_SingleEnded(0);
