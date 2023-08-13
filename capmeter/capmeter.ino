@@ -4,7 +4,6 @@
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 
-uint16_t nSample;
 char strFreq[16];
 double R = 10e3;
 double fcal = 1498801;
@@ -23,23 +22,29 @@ void setup()
     cal = capa(R, fcal);
 }
 
+bool first = true;
+
 void loop()
 {
     if (!gpsFreq.isBusy)
     {
-        if (nSample > 0)
+        if (first)
+        {
+            first = false;
+        }
+        else
         {
             lcd.setCursor(2, 0);
-            //gpsFreq.formatFreq(strFreq);
-            lcd.print(gpsFreq.freq);
+            gpsFreq.formatFreq(strFreq);
+            lcd.print(strFreq);
+            lcd.print(" Hz");
+            //lcd.print(gpsFreq.freq);
             
             lcd.setCursor(2, 1);
             double result = capa(R, gpsFreq.freq) - cal;
-            //result *= 1e15;
             lcd.print(result);
+            lcd.print(" pF");
         }
-        
-        ++nSample;
         
         gpsFreq.start(1);
     }
