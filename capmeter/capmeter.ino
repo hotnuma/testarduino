@@ -31,9 +31,22 @@ int mode(int num)
     return (int) lround(q);    
 }
 
+void printfreq()
+{
+    lcd.setCursor(2, 0);
+    gpsFreq.formatFreq(strFreq);
+    lcd.print(strFreq);
+    lcd.print(" Hz");
+}
+
 double capa(double R, double freq)
 {
     return (1 / (2 * log(2) * R * freq)) * 1e15;
+}
+
+double capa555(double R1, double R2, double freq)
+{
+    return (1.44 / ((R1 + (2 * R2)) * freq)) * 1e15;
 }
 
 bool first = true;
@@ -55,16 +68,13 @@ void loop()
     switch (fmode)
     {
         case 0:
+            printfreq();
         break;
 
         case 1:
-            //lcd.clear();
-            lcd.setCursor(2, 0);
-            gpsFreq.formatFreq(strFreq);
-            lcd.print(strFreq);
-            lcd.print(" Hz");
+            printfreq();
             
-             if (digitalRead(CalPin) == LOW)
+            if (digitalRead(CalPin) == LOW)
             {
                 cal = capa(R, gpsFreq.freq);
                 lcd.setCursor(0, 1);
@@ -79,9 +89,29 @@ void loop()
             }
         break;
         
+        case 2:
+            printfreq();
+            
+            if (digitalRead(CalPin) == LOW)
+            {
+                cal = capa555(R, R, gpsFreq.freq);
+                lcd.setCursor(0, 1);
+                lcd.print("  Cal...        ");
+            }
+            else
+            {
+                lcd.setCursor(2, 1);
+                double result = capa555(R, R, gpsFreq.freq) /*- cal*/;
+                lcd.print(result);
+                lcd.print(" pF");
+            }
+        break;
+        
         default:
-            //lcd.clear();
+            printfreq();
+            
             lcd.setCursor(2, 1);
+            lcd.print("Mode ");
             lcd.print(fmode);
         break;
     }
