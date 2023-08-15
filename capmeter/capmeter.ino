@@ -46,7 +46,7 @@ double capa(double R, double freq)
 
 double capa555(double R1, double R2, double freq)
 {
-    return (1.44 / ((R1 + (2 * R2)) * freq)) * 1e15;
+    return (1.44 / ((R1 + (2 * R2)) * freq)) * 1e12;
 }
 
 bool first = true;
