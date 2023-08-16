@@ -62,7 +62,7 @@ double capa_555(double R1, double R2, double freq)
 bool first = true;
 
 // Mode 1 : LM711 osc
-double R_711 = 10e3;
+double R_711 = 9990;
 double cal_711 = 48;
 
 // Mode 2 : 555 osc
