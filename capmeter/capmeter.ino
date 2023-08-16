@@ -3,12 +3,16 @@
 #include <math.h>
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
-
-double R = 10e3;
+#define LSIZE 16
+#define LEMPTY "                "
 
 const int CalPin = 7;
 int allmodes = 12;
-char strFreq[16];
+
+char tempstr[LSIZE+1];
+char linestr[LSIZE+1];
+
+double R = 10e3;
 
 void setup()
 {
@@ -29,10 +33,22 @@ int get_mode(int num)
 
 void printfreq()
 {
-    lcd.setCursor(2, 0);
-    gpsFreq.formatFreq(strFreq);
-    lcd.print(strFreq);
-    lcd.print(" Hz");
+    lcd.setCursor(0, 0);
+    gpsFreq.formatFreq(tempstr);
+    
+    printval(linestr, tempstr, 3);
+    strcpy(linestr + (LSIZE-3), " Hz");
+    lcd.print(linestr);
+}
+
+void printval(const char *outbuff, const char *str, int endchars)
+{
+    int len = strlen(str);
+    int pos = (LSIZE - endchars) - len;
+    if (pos < 0)
+        pos = 0;
+    strcpy(outbuff, LEMPTY);
+    strncpy(outbuff+pos, str, len);
 }
 
 double capa(double R, double freq)
@@ -81,7 +97,7 @@ void loop()
             else
             {
                 double result = capa(R, gpsFreq.freq) - cal;
-                lcd.setCursor(2, 1);
+                lcd.setCursor(0, 1);
                 lcd.print(result);
                 lcd.print(" pF");
             }
@@ -99,9 +115,12 @@ void loop()
             else
             {
                 double result = capa_555(R, R, gpsFreq.freq) - cal_555;
-                lcd.setCursor(2, 1);
-                lcd.print(result);
-                lcd.print(" pF");
+                dtostrf(result, 1, 2, tempstr);
+                printval(linestr, tempstr, 3);
+                strcpy(linestr + (LSIZE-3), " pF");
+                
+                lcd.setCursor(0, 1);
+                lcd.print(linestr);
             }
         break;
         
