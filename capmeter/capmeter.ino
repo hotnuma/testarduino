@@ -12,8 +12,6 @@ int allmodes = 12;
 char tempstr[LSIZE+1];
 char linestr[LSIZE+1];
 
-double R = 10e3;
-
 void setup()
 {
     pinMode(CalPin, INPUT_PULLUP);
@@ -51,18 +49,25 @@ void printval(const char *outbuff, const char *str, int endchars)
     strncpy(outbuff+pos, str, len);
 }
 
-double capa(double R, double freq)
+double capa_711(double R, double freq)
 {
     return (1 / (2 * log(2) * R * freq)) * 1e12;
 }
 
 double capa_555(double R1, double R2, double freq)
 {
-    return (1.44 / ((R1 + (2 * R2)) * freq)) * 1e12;
+    return (1.44 / ( (R1 + (2 * R2)) * freq )) * 1e12;
 }
 
 bool first = true;
-double cal = 48;
+
+// Mode 1 : LM711 osc
+double R_711 = 10e3;
+double cal_711 = 48;
+
+// Mode 2 : 555 osc
+double R1_555 = 9860;
+double R2_555 = 9980;
 double cal_555 = 200;
 
 void loop()
@@ -90,14 +95,14 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                cal = capa(R, gpsFreq.freq);
+                cal_711 = capa_711(R_711, gpsFreq.freq);
                 printval(linestr, "Cal...", 3);
                 lcd.setCursor(0, 1);
                 lcd.print(linestr);
             }
             else
             {
-                double result = capa(R, gpsFreq.freq) - cal;
+                double result = capa_711(R_711, gpsFreq.freq) - cal_711;
                 dtostrf(result, 1, 2, tempstr);
                 printval(linestr, tempstr, 3);
                 strcpy(linestr + (LSIZE-3), " pF");
@@ -111,14 +116,14 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                cal_555 = capa_555(R, R, gpsFreq.freq);
+                cal_555 = capa_555(R1_555, R2_555, gpsFreq.freq);
                 printval(linestr, "Cal...", 3);
                 lcd.setCursor(0, 1);
                 lcd.print(linestr);
             }
             else
             {
-                double result = capa_555(R, R, gpsFreq.freq) - cal_555;
+                double result = capa_555(R1_555, R2_555, gpsFreq.freq) - cal_555;
                 dtostrf(result, 1, 2, tempstr);
                 printval(linestr, tempstr, 3);
                 strcpy(linestr + (LSIZE-3), " pF");
