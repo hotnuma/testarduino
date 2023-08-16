@@ -45,15 +45,15 @@ void printval(const char *outbuff, const char *str, int endchars)
 {
     int len = strlen(str);
     int pos = (LSIZE - endchars) - len;
-    if (pos < 0)
-        pos = 0;
     strcpy(outbuff, LEMPTY);
+    if (pos < 0)
+        return;
     strncpy(outbuff+pos, str, len);
 }
 
 double capa(double R, double freq)
 {
-    return (1 / (2 * log(2) * R * freq)) * 1e15;
+    return (1 / (2 * log(2) * R * freq)) * 1e12;
 }
 
 double capa_555(double R1, double R2, double freq)
@@ -91,15 +91,18 @@ void loop()
             if (digitalRead(CalPin) == LOW)
             {
                 cal = capa(R, gpsFreq.freq);
+                printval(linestr, "Cal...", 3);
                 lcd.setCursor(0, 1);
-                lcd.print("  Cal...        ");
+                lcd.print(linestr);
             }
             else
             {
                 double result = capa(R, gpsFreq.freq) - cal;
+                dtostrf(result, 1, 2, tempstr);
+                printval(linestr, tempstr, 3);
+                strcpy(linestr + (LSIZE-3), " pF");
                 lcd.setCursor(0, 1);
-                lcd.print(result);
-                lcd.print(" pF");
+                lcd.print(linestr);
             }
         break;
         
@@ -109,8 +112,9 @@ void loop()
             if (digitalRead(CalPin) == LOW)
             {
                 cal_555 = capa_555(R, R, gpsFreq.freq);
+                printval(linestr, "Cal...", 3);
                 lcd.setCursor(0, 1);
-                lcd.print("  Cal...        ");
+                lcd.print(linestr);
             }
             else
             {
@@ -118,7 +122,6 @@ void loop()
                 dtostrf(result, 1, 2, tempstr);
                 printval(linestr, tempstr, 3);
                 strcpy(linestr + (LSIZE-3), " pF");
-                
                 lcd.setCursor(0, 1);
                 lcd.print(linestr);
             }
