@@ -51,7 +51,8 @@ void printval(const char *outbuff, const char *str, int endchars)
 
 double capa_711(double R, double freq)
 {
-    return (1 / (2 * log(2) * R * freq)) * 1e12;
+    //return (1 / (2 * log(2) * R * freq)) * 1e12;
+    return (1 / (1.443753 * R * freq)) * 1e12;
 }
 
 double capa_555(double R1, double R2, double freq)
