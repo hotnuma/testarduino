@@ -49,9 +49,10 @@ void printval(const char *outbuff, const char *str, int endchars)
     strncpy(outbuff+pos, str, len);
 }
 
-double capa_LC(double L, double freq)
+double capa_711(double R, double freq)
 {
-    return (1 / (pow((2 * M_PI * freq), 2) * L)) * 1e12;
+    //return (1 / (2 * log(2) * R * freq)) * 1e12;
+    return (1 / (1.443753 * R * freq)) * 1e12;
 }
 
 double capa_555(double R1, double R2, double freq)
@@ -62,8 +63,8 @@ double capa_555(double R1, double R2, double freq)
 bool first = true;
 
 // Mode 1 : LM711 osc
-double L_711 = 100e-6;
-double cal_711 = 988;
+double R_711 = 9990;
+double cal_711 = 48;
 
 // Mode 2 : 555 osc
 double R1_555 = 9860;
@@ -95,14 +96,14 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                cal_711 = capa_LC(L_711, gpsFreq.freq);
+                cal_711 = capa_711(R_711, gpsFreq.freq);
                 printval(linestr, "Cal...", 3);
                 lcd.setCursor(0, 1);
                 lcd.print(linestr);
             }
             else
             {
-                double result = capa_LC(L_711, gpsFreq.freq) - cal_711;
+                double result = capa_711(R_711, gpsFreq.freq) - cal_711;
                 dtostrf(result, 1, 2, tempstr);
                 printval(linestr, tempstr, 3);
                 strcpy(linestr + (LSIZE-3), " pF");
