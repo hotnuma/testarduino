@@ -5,22 +5,11 @@
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 #define LSIZE 16
 #define LEMPTY "                "
-
-const int CalPin = 7;
-int allmodes = 12;
-
 char tempstr[LSIZE+1];
 char linestr[LSIZE+1];
 
-void setup()
-{
-    pinMode(CalPin, INPUT_PULLUP);
-    
-    lcd.init();
-    lcd.backlight();
-
-    get_mode(allmodes);
-}
+const int CalPin = 7;
+int allmodes = 12;
 
 int get_mode(int num)
 {
@@ -69,6 +58,16 @@ bool first = true;
 // Mode 1 : LM711 osc
 double L_711 = 93.772*1e-6;
 double cal_711 = 988;
+
+void setup()
+{
+    pinMode(CalPin, INPUT_PULLUP);
+    
+    lcd.init();
+    lcd.backlight();
+
+    get_mode(allmodes);
+}
 
 void loop()
 {
