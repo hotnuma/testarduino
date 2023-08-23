@@ -29,6 +29,16 @@ int get_mode(int num)
     return (int) lround(q);    
 }
 
+void get_frequency()
+{
+    if (gpsFreq.isBusy)
+        return;
+
+    gpsFreq.start(1);
+
+    while (gpsFreq.isBusy == true) {}
+}
+
 void printfreq()
 {
     lcd.setCursor(0, 0);
@@ -60,28 +70,8 @@ bool first = true;
 double L_711 = 93.772*1e-6;
 double cal_711 = 988;
 
-void get_frequency()
-{
-    if (gpsFreq.isBusy)
-        return;
-
-    gpsFreq.start(1);
-
-    while (gpsFreq.isBusy == true) {}
-}
-
 void loop()
 {
-//    if (gpsFreq.isBusy)
-//        return;
-//
-//    if (first)
-//    {
-//        first = false;
-//        gpsFreq.start(1);
-//        return;
-//    }
-
     get_frequency();
 
     int mode = get_mode(allmodes);
@@ -121,6 +111,4 @@ void loop()
             lcd.print(mode);
         break;
     }
-
-    //gpsFreq.start(1);
 }
