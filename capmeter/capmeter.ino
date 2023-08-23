@@ -54,35 +54,35 @@ double capa_LC(double L, double freq)
     return (1 / (pow((2 * M_PI * freq), 2) * L)) * 1e12;
 }
 
-double capa_555(double R1, double R2, double freq)
-{
-    double C = 1.44 / ((R1 + (2 * R2)) * freq);
-    double k = 1000/984.785;
-    return C * 1e12 * k;
-}
-
 bool first = true;
 
 // Mode 1 : LM711 osc
 double L_711 = 93.772*1e-6;
 double cal_711 = 988;
 
-// Mode 2 : 555 osc
-double R1_555 = 9860;
-double R2_555 = 9980;
-double cal_555 = 200;
-
-void loop()
+void get_frequency()
 {
     if (gpsFreq.isBusy)
         return;
 
-    if (first)
-    {
-        first = false;
-        gpsFreq.start(1);
-        return;
-    }
+    gpsFreq.start(1);
+
+    while (gpsFreq.isBusy == true) {}
+}
+
+void loop()
+{
+//    if (gpsFreq.isBusy)
+//        return;
+//
+//    if (first)
+//    {
+//        first = false;
+//        gpsFreq.start(1);
+//        return;
+//    }
+
+    get_frequency();
 
     int mode = get_mode(allmodes);
     
@@ -113,27 +113,6 @@ void loop()
             }
         break;
         
-        case 2:
-            printfreq();
-            
-            if (digitalRead(CalPin) == LOW)
-            {
-                cal_555 = capa_555(R1_555, R2_555, gpsFreq.freq);
-                printval(linestr, "Cal...", 3);
-                lcd.setCursor(0, 1);
-                lcd.print(linestr);
-            }
-            else
-            {
-                double result = capa_555(R1_555, R2_555, gpsFreq.freq) - cal_555;
-                dtostrf(result, 1, 2, tempstr);
-                printval(linestr, tempstr, 3);
-                strcpy(linestr + (LSIZE-3), " pF");
-                lcd.setCursor(0, 1);
-                lcd.print(linestr);
-            }
-        break;
-        
         default:
             printfreq();
             
@@ -143,5 +122,5 @@ void loop()
         break;
     }
 
-    gpsFreq.start(1);
+    //gpsFreq.start(1);
 }
