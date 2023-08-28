@@ -63,12 +63,12 @@ bool first = true;
 // Mode 1 : LM711 LC
 double lc711_L = 100e-6;
 double lc711_cal = 1000;
-double lc711_k = (10000.0/8957.0);
+double lc711_k = 1; //(10000.0/8957.0);
 
 // Mode 3 : LM711 RC
-double rc711_R = 10e3;
-double rc711_cal = 1072; // 48
-double rc711_k = (10000.0/9946.5);
+double rc711_R = 1790;
+double rc711_cal = 1193; // 48
+double rc711_k = 0.92;
 
 void setup()
 {
