@@ -55,15 +55,15 @@ double capa_RC(double R, double freq, double k)
 
 bool first = true;
 
-// Mode 3 : LM711 RC
+// Mode 2 : LM711 RC
 
 //double rc711_R = 1790;
 //double rc711_cal = 1193;
 //double rc711_k = 0.92;
 
-double rc711_R = 560;
-double rc711_cal = 1482;
-double rc711_k = 1.65;
+double rc711_R = 1500;
+double rc711_cal = 1679;
+double rc711_k = 0.495;
 
 void setup()
 {
@@ -87,7 +87,7 @@ void loop()
             printfreq();
         break;
 
-        case 3:
+        case 2:
             printfreq();
             
             if (digitalRead(CalPin) == LOW)
