@@ -87,7 +87,7 @@ void loop()
             printfreq();
         break;
 
-        case 2:
+        case 1:
             printfreq();
             
             if (digitalRead(CalPin) == LOW)
