@@ -50,7 +50,7 @@ void printval(const char *outbuff, const char *str, int endchars)
 
 double capa_RC(double R, double freq, double k)
 {
-    return (1 / (2 * log(2) * R * freq)) * 1e12 * k;
+    return (1 / (k * R * freq)) * 1e12;
 }
 
 bool first = true;
@@ -62,8 +62,8 @@ bool first = true;
 //double rc711_k = 0.92;
 
 double rc711_R = 560;
-double rc711_cal = 1472;
-double rc711_k = 0.84;
+double rc711_cal = 1482;
+double rc711_k = 1.65;
 
 void setup()
 {
