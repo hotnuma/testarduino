@@ -60,7 +60,7 @@ bool first = true;
 
 double rc711_R = 1790;
 double rc711_cal = 1220;
-double rc711_k = 1.40;
+double rc711_k = 1.42;
 
 void setup()
 {
