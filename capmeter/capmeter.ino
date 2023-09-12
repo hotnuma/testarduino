@@ -8,13 +8,14 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 char tempstr[LSIZE+1];
 char linestr[LSIZE+1];
 
+#define ADC 1023
 const int CalPin = 7;
 int allmodes = 12;
 
 int get_mode(int num)
 {
     int adc = analogRead(A0);
-    double q = ((double) adc / 1024.0 * (double) num);
+    double q = ((double) adc / ADC * (double) num);
     return (int) lround(q);    
 }
 
