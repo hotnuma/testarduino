@@ -59,8 +59,8 @@ bool first = true;
 // Mode 2 : LM711 RC
 
 double rc711_R = 1790;
-double rc711_cal = 1220;
-double rc711_k = 1.42;
+double rc711_cal = 1231.305701;
+double rc711_k = 1.412463;
 
 void setup()
 {
