@@ -54,11 +54,6 @@ double capa_RC(double R, double freq, double k)
     return (1 / (k * R * freq)) * 1e12;
 }
 
-//double capa_LC(double part, double freq)
-//{
-//    return (1 / (pow((2 * M_PI * freq), 2) * part));
-//}
-
 double LC_cal(double C2, double F2, double F1)
 {
     double FF2 = pow(F2, 2);
@@ -82,7 +77,7 @@ bool first = true;
 // Mode 1 : LM711 RC
 double rc711_R = 1790;
 double rc711_cal = 1231.305701;
-double rc711_k = 1.412463;
+double rc711_k = 1.45;
 
 // Mode 2 : LM711 LC
 double C2 = 1000e-12;
