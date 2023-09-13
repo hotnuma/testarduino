@@ -54,13 +54,21 @@ double capa_RC(double R, double freq, double k)
     return (1 / (k * R * freq)) * 1e12;
 }
 
+double capa_LC(double part, double freq)
+{
+    return (1 / (pow((2 * M_PI * freq), 2) * part)) * 1e12;
+}
+
 bool first = true;
 
-// Mode 2 : LM711 RC
-
+// Mode 1 : LM711 RC
 double rc711_R = 1790;
 double rc711_cal = 1231.305701;
 double rc711_k = 1.412463;
+
+// Mode 2 : LM711 LC
+double lc711_L = 100e-6;
+double lc711_C1 = 1200;
 
 void setup()
 {
@@ -105,6 +113,27 @@ void loop()
             }
         break;
 
+        case 2:
+            printfreq();
+            
+            if (digitalRead(CalPin) == LOW)
+            {
+                lc711_C1 = capa_LC(lc711_L, gpsFreq.freq);
+                printval(linestr, "Cal...", 3);
+                lcd.setCursor(0, 1);
+                lcd.print(linestr);
+            }
+            else
+            {
+                double result = capa_LC(lc711_L, gpsFreq.freq) - lc711_C1;
+                dtostrf(result, 1, 2, tempstr);
+                printval(linestr, tempstr, 3);
+                strcpy(linestr + (LSIZE-3), " pF");
+                lcd.setCursor(0, 1);
+                lcd.print(linestr);
+            }
+        break;
+        
         default:
             printfreq();
             
