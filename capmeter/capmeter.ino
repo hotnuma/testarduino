@@ -71,7 +71,6 @@ double rc711_R = 1790;
 double rc711_cal = 1231e-12;
 double rc711_k = 1.45;
 
-uint32_t F1 = 318843;
 double rc711_C2 = 1000e-12;
 double rc711_k2 = 1.0;
 
@@ -94,7 +93,7 @@ void loop()
     switch (mode)
     {
         case 0:
-            F1 = gpsFreq.freq;
+            //F1 = gpsFreq.freq;
             printfreq();
         break;
 

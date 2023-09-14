@@ -3,11 +3,7 @@ double LC_cal(double C2, double F2, double F1)
 {
     double FF2 = pow(F2, 2);
     
-    double result = C2 * (FF2 / (pow(F1, 2) - FF2));
-    
-    printf("C1 = %f\n", result * 1e12);
-    
-    return result;
+    return C2 * (FF2 / (pow(F1, 2) - FF2));
 }
 
 double LC_capa(double F, double F1, double C1, double k)
@@ -17,9 +13,11 @@ double LC_capa(double F, double F1, double C1, double k)
     return C1 * ((pow(F1, 2) / pow(F, 2)) - 1.0) * k;
 }
 
+// Mode 0
+double F1 = 523773;
+
 // Mode 2 : LM711 LC
 double C2 = 1000e-12;
-double F1 = 523773;
 double C1 = 1020e-12;
 double k = 0.95;
 
