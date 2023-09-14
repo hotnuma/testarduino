@@ -68,11 +68,11 @@ bool first = true;
 
 // Mode 1 : LM711 RC
 double rc711_R = 1790;
+double rc711_cal = 1231e-12;
 double rc711_k = 1.45;
 
 uint32_t F1 = 318843;
 double rc711_C2 = 1000e-12;
-double rc711_cal = 1231e-12;
 double rc711_k2 = 1.0;
 
 void setup()
@@ -103,9 +103,9 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                //rc711_cal = RC_capa(rc711_R, gpsFreq.freq, rc711_k);
+                rc711_cal = RC_capa(rc711_R, gpsFreq.freq, rc711_k);
                 
-                rc711_cal = RC_cal(F1, rc711_C2, gpsFreq.freq);
+                //rc711_cal = RC_cal(F1, rc711_C2, gpsFreq.freq);
                 
                 printval(linestr, "Cal...", 3);
                 lcd.setCursor(0, 1);
@@ -113,9 +113,9 @@ void loop()
             }
             else
             {
-                //double result = RC_capa(rc711_R, gpsFreq.freq, rc711_k) - rc711_cal;
+                double result = RC_capa(rc711_R, gpsFreq.freq, rc711_k) - rc711_cal;
                 
-                double result = RC_capa2(gpsFreq.freq, rc711_cal, F1, rc711_k2);
+                //double result = RC_capa2(gpsFreq.freq, rc711_cal, F1, rc711_k2);
                 
                 dtostrf(result * 1e12, 1, 2, tempstr);
                 printval(linestr, tempstr, 3);
