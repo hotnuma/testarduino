@@ -67,12 +67,12 @@ double RC_capa2(double F, double C1, double F1, double k)
 bool first = true;
 
 // Mode 1 : LM711 RC
-double rc711_R = 1790;
-double rc711_cal = 1231e-12;
-double rc711_k = 1.45;
+double rc711_R = 1800;
+double rc711_cal = 1200e-12;
+double rc711_k = 2 * log(2);
 
-double rc711_C2 = 1000e-12;
-double rc711_k2 = 1.0;
+//double rc711_C2 = 1000e-12;
+//double rc711_k2 = 1.0;
 
 void setup()
 {
