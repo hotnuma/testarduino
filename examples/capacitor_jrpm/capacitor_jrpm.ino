@@ -15,9 +15,9 @@ ________________________________________________________________________________
                                      Diciembre de 2022 (v1.2)
 ________________________________________________________________________________________________________
 */
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 #include <Capacitor.h>
-#include <LiquidCrystal.h>
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 String Version = "(v1.2)";
 #define resistencia_H  10035.00F    //R alta: 10K para cargar/descargar el condensador
@@ -73,7 +73,8 @@ void setup() {
   Serial.print(Version);  
   Serial.println(F(" ###"));  
   
-  lcd.begin(16, 2);
+  lcd.init();
+  lcd.backlight();
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(F("Capacitor J_RPM "));
