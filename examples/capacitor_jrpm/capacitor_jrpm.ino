@@ -1,36 +1,24 @@
 /*
-                    ***  Medidor de capacidad y ESR con 2 entradas (ATMega328P) ***
-                                   1pF -> 1uF  / 50nF -> 10mF 
-                               >>>  Mide ESR a partir de 10uF  <<<
-
-           Se utiliza la librería Capacitor.h de Jonathan Nethercott, en la entrada de capacidades BAJAS 
-                   "Capacitor.h" habilitada para medir capacidades BAJAS, entre 1pF y 1uF
-                  https://wordpress.codewrite.co.uk/pic/2014/01/25/capacitance-meter-mk-ii/
-
-        IMPORTANTE: Arrancar con las puntas abiertas, porque se calibran el '0' de las 2 entradas
-                                   *** Capacitor_JRPM.ino ***
-_____________________________________________________________________________________________________
-                                       Escrito por: J_RPM
-                                        http://j-rpm.com
-                                     Diciembre de 2022 (v1.2)
-________________________________________________________________________________________________________
-*/
+ * capacity esr meter by J_RPM
+ * http://j-rpm.com/2022/12/capacimetro-esr-con-arduino-v2/
+ * https://wordpress.codewrite.co.uk/pic/2014/01/25/capacitance-meter-mk-ii/
+ */
+#include <Capacitor.h>
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
-#include <Capacitor.h>
 
 String Version = "(v1.2)";
 #define resistencia_H  10035.00F    //R alta: 10K para cargar/descargar el condensador
 #define resistencia_L  275.00F      //R baja: 240 para cargar/descargar el condensador
 
-#define CapIN_H       A1     // Medida de capacidades ALTAS + ESR (>50nF)
-#define CapOUT        A2     // Punto comúm de medida
-#define CapIN_L       A3     // Medida capacidad BAJAS (<1uF)
+#define CapIN_H       A1     // High values (>50nf) + ESR
+#define CapOUT        A2     // Common
+#define CapIN_L       A3     // Low values (<1uF)
 #define cargaPin      12     // Carga lenta (resistencia_H)
 #define descargaPin   13     // Carga & Descarga & Impulso ESR (resistencia_L)
 
-// Definición de los dos pines de conexión (A3, A2), para capacidades BAJAS
-Capacitor pFcap(A3,A2);
+// Low cap entries
+Capacitor pFcap(A3, A2);
 
 // Medidas Offset para el calibrado 
 float Off_pF_Hr = 0;                   
@@ -42,11 +30,11 @@ unsigned long iniTime;
 unsigned long endTime;
 float medida; 
 float valor;               
-String unidad;
+String unit;
 String tipo;
 
-// Capacidades BAJAS < 1uF
-int Repe = 30;        
+// low cap repeat
+int repeat = 30;        
 
 // ESR
 const int MAX_ADC_VALUE = 1023;
@@ -55,38 +43,26 @@ unsigned int milliVolts;
 unsigned int ADCref = 0;
 float esr;
 
-////////////////////////////////////////////////////////////////////////////////////
-void setup() {
-  // Estructura de las variables de calibrado y sus valores por defecto
-  // ... para ATMEGA328P con la librería: Capacitor.h 
-  //void Capacitor::Calibrate(float strayCap, float pullupRes)
-  //#define STRAY_CAP (26.30);
-  //#define R_PULLUP (34.80);
-  pFcap.Calibrate(41.95,36.00);  // J_RPM: 41.95,36.00 >>> Se puede comentar esta línea, si los valores C,R son 26.30 y 34.80
-  
-  pinMode(CapOUT, OUTPUT);
-  pinMode(CapIN_L, OUTPUT);
-  Serial.begin(9600);
+void setup()
+{
+    pFcap.Calibrate(41.95, 36.00);
 
-  // Inicializa el LCD y pone el mensaje de inicio
-  Serial.print(F("### Capacitor J_RPM "));  
-  Serial.print(Version);  
-  Serial.println(F(" ###"));  
-  
-  lcd.init();
-  lcd.backlight();
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(F("Capacitor J_RPM "));
-  lcd.setCursor(5, 1);
-  lcd.print(Version);
-  delay(2000);
+    pinMode(CapOUT, OUTPUT);
+    pinMode(CapIN_L, OUTPUT);
 
-  lcd.setCursor(1, 1);
-  lcd.print(F("...calibrando   "));
-  calibrado();
-  delay(1000);
+    lcd.init();
+    lcd.backlight();
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(F("Capacitor J_RPM "));
+    lcd.setCursor(5, 1);
+    lcd.print(Version);
+    delay(2000);
 
+    lcd.setCursor(1, 1);
+    lcd.print(F("...calibrando   "));
+    calibrado();
+    delay(1000);
 }
 
  /////////////////////////////// CAPACIDAD //////////////////////////////////  
@@ -103,10 +79,10 @@ void loop() {
   // TEST ??
   if (muestra2 < 1000 && cambio < 30 ) {
     tipo = "[Test]";
-    Serial.print(F("Muestra 1: ")); 
-    Serial.println(muestra1); 
-    Serial.print(F("Muestra 2: ")); 
-    Serial.println(muestra2); 
+    //Serial.print(F("Muestra 1: ")); 
+    //Serial.println(muestra1); 
+    //Serial.print(F("Muestra 2: ")); 
+    //Serial.println(muestra2); 
  
    // <<< Test OK
   }else {
@@ -127,11 +103,11 @@ void loop() {
   
     if (medida > 1){
       valor = medida;
-      unidad = " uF";
+      unit = " uF";
     }else if (medida > 0.05){ 
       tipo = " >50nF";
       valor = medida * 1000; 
-      unidad = " nF";
+      unit = " nF";
     }else {
       tipo = "  <1uF";
       midePF();
@@ -140,13 +116,13 @@ void loop() {
       // No muestra valores inferiores a 1 pF 
       if (valor < 1) { 
         valor = 0;
-        unidad = " pF";
+        unit = " pF";
       }else if (valor > 1000000) {
         valor = -999;
-        unidad = "> 1uF";
+        unit = "> 1uF";
       }else if (valor > 1000) {
         valor = valor / 1000;
-        unidad = " nF";
+        unit = " nF";
       }else{
         // Ajuste fino (pF)
         if (valor < 35){
@@ -158,7 +134,7 @@ void loop() {
         }else {
           valor = valor - 22;
         }
-        unidad = " pF";
+        unit = " pF";
       }
     }
    }
@@ -169,22 +145,22 @@ void loop() {
   if (medida > 10 || tipo == "[Test]"){
     mideESR();
      if (tipo == "[Test]"){
-        Serial.print(F("OHM: "));
+        //Serial.print(F("OHM: "));
         lcd.print(F("OHM: "));
      }else {
-        Serial.print(F("ESR: "));
+        //Serial.print(F("ESR: "));
         lcd.print(F("ESR: "));
      }
 
     if(esr < 300){
-      Serial.print(esr,1);
+      //Serial.print(esr,1);
       lcd.print(esr,1); 
       lcd.print(F("  ")); 
     }else {
-      Serial.println(F(">300"));
+      //Serial.println(F(">300"));
       lcd.print(F(">300")); 
     }
-    Serial.println(F(" Ohm"));
+    //Serial.println(F(" Ohm"));
   } else {
     lcd.print(F("Capacidad "));
   }
@@ -196,31 +172,31 @@ void loop() {
   if (tipo == "[Test]"){
     lcd.setCursor(0, 1);
     lcd.print(F("#ERROR capacidad"));
-    Serial.println(F("#ERROR capacidad")); 
+    //Serial.println(F("#ERROR capacidad")); 
   }else {
     // Test OK >>> se muestra la medida en el display
     if (valor < 0 && valor != -999) {valor = 0;}
     
     // Presenta los resultados de la medida y muestra la actividad en el display
-    Serial.print(F("Capacidad"));
-    Serial.print(tipo);
-    Serial.print(F(" = "));  
+    //Serial.print(F("Capacidad"));
+    //Serial.print(tipo);
+    //Serial.print(F(" = "));  
 
     lcd.setCursor(0, 1);
     lcd.print("     ");
     if (valor != -999) {
-      if (valor < 1000 &&  unidad != " pF" ) {
+      if (valor < 1000 &&  unit != " pF" ) {
         lcd.print(valor,2);
-        Serial.print(valor,2);  
+        //Serial.print(valor,2);  
       }else {
         lcd.print(" ");
         lcd.print(valor,0);
-        Serial.print(valor,0);  
+        //Serial.print(valor,0);  
       }
     }
-    lcd.print(unidad);
+    lcd.print(unit);
     lcd.print("      ");
-    Serial.println(unidad);  
+    //Serial.println(unit);  
   }
     
   //Mantiene la marca de actividad en el LCD durante 300ms
@@ -234,20 +210,20 @@ void calibrado() {
   descargaCap();
   cargaCap_Slow();
   Off_pF_H = ((float)endTime / resistencia_H)*1000000;  
-  Serial.print(F("Offset <80uF (pF): ")); 
-  Serial.println(Off_pF_H);
+  //Serial.print(F("Offset <80uF (pF): ")); 
+  //Serial.println(Off_pF_H);
 
   descargaCap();
   cargaCap_Fast();
   Off_pF_Hr = ((float)endTime / resistencia_L)*1000000;  
-  Serial.print(F("Offset >80uF (pF): ")); 
-  Serial.println(Off_pF_Hr);
+  //Serial.print(F("Offset >80uF (pF): ")); 
+  //Serial.println(Off_pF_Hr);
 
   midePF();
   Off_pF_Low = valor; 
 
-  Serial.print(F("Offset <1uF (pF): ")); 
-  Serial.println(Off_pF_Low);
+  //Serial.print(F("Offset <1uF (pF): ")); 
+  //Serial.println(Off_pF_Low);
 
   medidaADC();
 }
@@ -306,8 +282,8 @@ int refADC(){
 /////////////////////////////////////////////////////////////////////////
 void medidaADC() {
   ADCref = refADC();
-  Serial.print(F("ADCref (mV): "));
-  Serial.println(ADCref);
+  //Serial.print(F("ADCref (mV): "));
+  //Serial.println(ADCref);
 }
 /////////////////////////////////////////////////////////////////////////
 void mideESR() {
@@ -323,24 +299,24 @@ void mideESR() {
 
   // Mide el Offset del punto de referencia de la medida con respecto a GND 
   Off_GND =  analogRead(CapOUT); 
-  Serial.print(F("Off_GND (Ohm): "));
-  Serial.println(Off_GND);
+  //Serial.print(F("Off_GND (Ohm): "));
+  //Serial.println(Off_GND);
 
   // Corrige el Offset (resistencia a masa de A2)
   sampleESR = sampleESR - Off_GND;
 
-  Serial.print(F("LEE: "));
-  Serial.println(sampleESR);
+  //Serial.print(F("LEE: "));
+  //Serial.println(sampleESR);
   descargaCap();
 
   milliVolts = (sampleESR * (float)ADCref) / MAX_ADC_VALUE;
-  Serial.print(F("mV: "));
-  Serial.println(milliVolts);
+  //Serial.print(F("mV: "));
+  //Serial.println(milliVolts);
 
   // Calcula la resistencia de A2 a GND y la suma a la resistencia de carga
   int R_GND = resistencia_L / MAX_ADC_VALUE * Off_GND;
-  Serial.print(F("R_GND (Ohm): "));
-  Serial.println(R_GND);
+  //Serial.print(F("R_GND (Ohm): "));
+  //Serial.println(R_GND);
   
   esr = (resistencia_L + R_GND) / (((float)ADCref / milliVolts) - 1); 
   
@@ -352,12 +328,12 @@ void mideESR() {
 void midePF(){
   descargaCap();
   float valorMedio = 0;                   // Reinicia valor medio
-  for(int i = 0; i < Repe; i++){
+  for(int i = 0; i < repeat; i++){
     valor = pFcap.Measure();
     valorMedio = valorMedio + valor;
     descargaCap();
   }
-  valor = valorMedio / Repe;              // Guarda el valor promedio de las muestras
+  valor = valorMedio / repeat;              // Guarda el valor promedio de las muestras
 }
 /////////////////////////////////////////////////////////////////////////
 // FIN
