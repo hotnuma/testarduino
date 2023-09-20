@@ -56,31 +56,19 @@ void printfreq()
 }
 
 
-//bool first = true;
-
-
 // Mode 1 : LM711 RC -------------------------------------------------------------------
-double rc711_R = 1800;
-double rc711_cal = 1200e-12;
-double rc711_k = 2 * log(2);
 
-double RC_capa(double R, double freq, double k)
+double lc711_k = 1.44;
+double lc711_R = 1900;
+double lc711_C = 1126e-12;
+
+double calc_lc711(double k, double R, double freq)
 {
     return (1 / (k * R * freq));
 }
 
-//double RC_cal(double F1, double C2, double F2)
-//{
-//    return (C2 * (F2 / (F1 - F2)));
-//}
-//
-//double RC_capa2(double F, double C1, double F1, double k)
-//{
-//    return C1 * ((F1 / F) - 1.0) * k;
-//}
-
-
 // Mode 2 : High C 555 -----------------------------------------------------------------
+
 double hc555_R1 = 1000;
 double hc555_R2 = 1000;
 double hc555_cal = 1e-6;
@@ -92,6 +80,7 @@ double calc_hc555(double R1, double R2, double t)
 
 
 // Mode 3 : Low C 555 ------------------------------------------------------------------
+
 double lc555_R1 = 1200;
 double lc555_R2 = 1000;
 double lc555_C = 1750e-12;
@@ -130,7 +119,7 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                rc711_cal = RC_capa(rc711_R, gpsFreq.freq, rc711_k);
+                lc711_C = calc_lc711(lc711_k, lc711_R, gpsFreq.freq);
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, "Cal...", 3);
@@ -140,7 +129,7 @@ void loop()
             }
             else
             {
-                double result = RC_capa(rc711_R, gpsFreq.freq, rc711_k) - rc711_cal;
+                double result = calc_lc711(lc711_k, lc711_R, gpsFreq.freq) - lc711_C;
                 
                 dtostrf(result * 1e12, 1, 2, tempstr);
                 
