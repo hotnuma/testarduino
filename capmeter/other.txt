@@ -1,0 +1,51 @@
+double RC_cal(double F1, double C2, double F2)
+{
+    return (C2 * (F2 / (F1 - F2)));
+}
+
+double RC_capa2(double F, double C1, double F1, double k)
+{
+    return C1 * ((F1 / F) - 1.0) * k;
+}
+
+
+// Mode 3 : High C 555 --------------------------------------------------------
+
+double high555_R1 = 1200;
+double high555_R2 = 1000;
+double high555_C = 1750e-12;
+
+double calc_high555(double R1, double R2, uint32_t f)
+{
+    return (1 / (log(2) * (R1 + (2 * R2)) * (double) f));
+}
+
+
+        case 3:
+            printfreq();
+            
+            if (digitalRead(CalPin) == LOW)
+            {
+                high555_C = calc_high555(high555_R1, high555_R2, gpsFreq.freq);
+                
+                lcd_clear(linestr);
+                lcd_cpy(linestr, "Cal...", 3);
+                
+                lcd.setCursor(0, 1);
+                lcd.print(linestr);
+            }
+            else
+            {
+                double result = calc_high555(high555_R1, high555_R2, gpsFreq.freq) - high555_C;
+                
+                dtostrf(result * 1e12, 1, 2, tempstr);
+                
+                lcd_clear(linestr);
+                lcd_cpy(linestr, tempstr, 3);
+                
+                strcpy(linestr + (STRSIZE-3), " pF");
+                lcd.setCursor(0, 1);
+                lcd.print(linestr);
+            }
+        break;
+        

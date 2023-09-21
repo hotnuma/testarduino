@@ -56,38 +56,39 @@ void printfreq()
 }
 
 
-// Mode 1 : LM711 RC -------------------------------------------------------------------
+// Mode 1 : Low C 711 ---------------------------------------------------------
 
-double lc711_k = 1.44;
-double lc711_R = 1900;
-double lc711_C = 1126e-12;
+double high711_k = 1.44;
+double high711_R = 1900;
+double high711_C = 1126e-12;
 
-double calc_lc711(double k, double R, double freq)
+double calc_high711(double k, double R, double freq)
 {
     return (1 / (k * R * freq));
 }
 
-// Mode 2 : High C 555 -----------------------------------------------------------------
 
-double hc555_R1 = 1000;
-double hc555_R2 = 1000;
-double hc555_cal = 1e-6;
+// Mode 2 : Low C 555 ---------------------------------------------------------
 
-double calc_hc555(double R1, double R2, double t)
+double low555_R1 = 1000;
+double low555_R2 = 1000;
+double low555_cal = 1e-6;
+
+double calc_low555(double R1, double R2, double t)
 {
     return t / (log(2) * (R1 + (2 * R2)));
 }
 
 
-// Mode 3 : Low C 555 ------------------------------------------------------------------
+// Mode 3 : High C 711 ---------------------------------------------------------
 
-double lc555_R1 = 1200;
-double lc555_R2 = 1000;
-double lc555_C = 1750e-12;
+double low711_k = 2 * log(2); //1.44;
+double low711_R = 1900;
+double low711_C = 1000e-9;
 
-double calc_lc555(double R1, double R2, uint32_t f)
+double calc_low711(double k, double R, double t)
 {
-    return (1 / (log(2) * (R1 + (2 * R2)) * (double) f));
+    return t / (k * R);
 }
 
 
@@ -110,7 +111,6 @@ void loop()
     switch (mode)
     {
         case 0:
-            //F1 = gpsFreq.freq;
             printfreq();
         break;
 
@@ -119,7 +119,7 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                lc711_C = calc_lc711(lc711_k, lc711_R, gpsFreq.freq);
+                low711_C = calc_high711(low711_k, low711_R, gpsFreq.freq);
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, "Cal...", 3);
@@ -129,7 +129,7 @@ void loop()
             }
             else
             {
-                double result = calc_lc711(lc711_k, lc711_R, gpsFreq.freq) - lc711_C;
+                double result = calc_high711(low711_k, low711_R, gpsFreq.freq) - low711_C;
                 
                 dtostrf(result * 1e12, 1, 2, tempstr);
                 
@@ -147,7 +147,7 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                hc555_cal = calc_hc555(hc555_R1, hc555_R2, ((double) gpsFreq.freq / (double) 4e6));
+                low555_cal = calc_low555(low555_R1, low555_R2, ((double) gpsFreq.freq / (double) 4e6));
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, "Cal...", 3);
@@ -157,7 +157,7 @@ void loop()
             }
             else
             {
-                double result = calc_hc555(hc555_R1, hc555_R2, ((double) gpsFreq.freq / (double) 4e6)) - hc555_cal;
+                double result = calc_low555(low555_R1, low555_R2, ((double) gpsFreq.freq / (double) 4e6)) - low555_cal;
                 
                 dtostrf(result * 1e6, 1, 2, tempstr);
                 
@@ -176,7 +176,7 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                lc555_C = calc_lc555(lc555_R1, lc555_R2, gpsFreq.freq);
+                low711_C = calc_low711(low711_k, low711_R, ((double) gpsFreq.freq / (double) 4e6));
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, "Cal...", 3);
@@ -186,17 +186,18 @@ void loop()
             }
             else
             {
-                double result = calc_lc555(lc555_R1, lc555_R2, gpsFreq.freq) - lc555_C;
+                double result = calc_low711(low711_k, low711_R, ((double) gpsFreq.freq / (double) 4e6)) - low711_C;
                 
-                dtostrf(result * 1e12, 1, 2, tempstr);
+                dtostrf(result * 1e6, 1, 2, tempstr);
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, tempstr, 3);
                 
-                strcpy(linestr + (STRSIZE-3), " pF");
+                strcpy(linestr + (STRSIZE-3), " uF");
                 lcd.setCursor(0, 1);
                 lcd.print(linestr);
             }
+            delay(1000);
         break;
         
         default:
