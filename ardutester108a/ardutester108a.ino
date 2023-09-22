@@ -86,7 +86,7 @@
 // The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 // This lcd-display don't have a character for Ohm and for u (micro).
 // Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
-#define LCD_CYRILLIC
+//#define LCD_CYRILLIC
 
 // The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 // For this LCD type the contrast must be set with software command.
