@@ -56,13 +56,13 @@ void printfreq()
 }
 
 
-// Mode 1 : Low C 711 ---------------------------------------------------------
+// Mode 1 : Low C 311 ---------------------------------------------------------
 
-double low711_k = 1.44;
-double low711_R = 1900;
-double low711_C = 1126e-12;
+double low311_k = 1.44;
+double low311_R = 1900;
+double low311_C = 1126e-12;
 
-double calc_low711(double k, double R, double freq)
+double calc_low311(double k, double R, double freq)
 {
     return (1 / (k * R * freq));
 }
@@ -80,13 +80,13 @@ double calc_high555(double R1, double R2, double t)
 }
 
 
-//~ // Mode 3 : High C 711 ---------------------------------------------------------
+// Mode 3 : High C 311 --------------------------------------------------------
 
-double high711_k = 2 * log(2); //1.44;
-double high711_R = 1900;
-double high711_C = 1000e-9;
+double high311_k = 2 * log(2); //1.44;
+double high311_R = 1900;
+double high311_C = 1000e-9;
 
-double calc_high711(double k, double R, double t)
+double calc_high311(double k, double R, double t)
 {
     return t / (k * R);
 }
@@ -119,7 +119,7 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                low711_C = calc_low711(low711_k, low711_R, gpsFreq.freq);
+                low311_C = calc_low311(low311_k, low311_R, gpsFreq.freq);
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, "Cal...", 3);
@@ -129,7 +129,7 @@ void loop()
             }
             else
             {
-                double result = calc_low711(low711_k, low711_R, gpsFreq.freq) - low711_C;
+                double result = calc_low311(low311_k, low311_R, gpsFreq.freq) - low311_C;
                 
                 dtostrf(result * 1e12, 1, 2, tempstr);
                 
@@ -176,7 +176,7 @@ void loop()
             
             if (digitalRead(CalPin) == LOW)
             {
-                high711_C = calc_high711(high711_k, high711_R, ((double) gpsFreq.freq / (double) 4e6));
+                high311_C = calc_high311(high311_k, high311_R, ((double) gpsFreq.freq / (double) 4e6));
                 
                 lcd_clear(linestr);
                 lcd_cpy(linestr, "Cal...", 3);
@@ -186,7 +186,7 @@ void loop()
             }
             else
             {
-                double result = calc_high711(high711_k, high711_R, ((double) gpsFreq.freq / (double) 4e6)) - high711_C;
+                double result = calc_high311(high311_k, high311_R, ((double) gpsFreq.freq / (double) 4e6)) - high311_C;
                 
                 dtostrf(result * 1e6, 1, 2, tempstr);
                 
