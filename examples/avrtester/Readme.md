@@ -1,11 +1,12 @@
 
 * AVR Transistor Tester
 
-    https://www.mikrocontroller.net/articles/AVR_Transistortester#Introduction_(English)  
-    https://www.mikrocontroller.net/topic/transistortester-avr?page=1  
-    
+    https://github.com/kubi48/TransistorTester-source  
     https://github.com/kubi48/TransistorTester-old-versions/tree/master  
     https://github.com/Mikrocontroller-net/transistortester/tree/master  
+    
+    https://www.mikrocontroller.net/articles/AVR_Transistortester#Introduction_(English)  
+    https://www.mikrocontroller.net/topic/transistortester-avr?page=1  
     
     [TransistorTesterVC1.png](https://www.mikrocontroller.net/wikifiles/thumb/6/64/TransistorTesterVC1.png/779px-TransistorTesterVC1.png)  
     
@@ -22,6 +23,8 @@
     ArduTesterOLED.zip  
 
 * Ardutester 1.13
+    
+    https://projecthub.arduino.cc/plouc68000/ardutester-millenium-the-ultimate-uno-mega-versions-3d1f9a  
 
     https://www.youtube.com/watch?v=pJs-kJ0-G1s  
     ArduTester_more.zip  
