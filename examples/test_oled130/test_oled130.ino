@@ -17,9 +17,9 @@ void loop()
     
     display.setTextSize(2);
     
-    display.print("123");
+    //display.print("4 000 000 Hz");
     
-    //display.println("12345678901234567890");
+    display.println("12345678901234567890");
     
     display.display();
     
