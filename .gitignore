@@ -1,3 +1,9 @@
 **/autre/
 **/libraries/
-
+ComponentTester
+*.o
+*.o.d
+*.eep
+*.hex
+*.lss
+*.map

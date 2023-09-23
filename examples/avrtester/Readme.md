@@ -1,4 +1,10 @@
 
+* Build
+    
+    https://www.pololu.com/docs/0J61/6.3  
+    
+    `sudo apt-get install gcc-avr avr-libc avrdude`
+    
 * AVR Transistor Tester
 
     https://github.com/kubi48/TransistorTester-source  
