@@ -515,7 +515,7 @@
  *  - I2C interface using bit-bang I2C
  */
 
-#if 0
+//#if 0
 #define LCD_SSD1306                     /* display controller SSD1306 */
 #define LCD_GRAPHIC                     /* graphic display */
 #define LCD_I2C                         /* I2C interface */
@@ -545,7 +545,7 @@
 #define I2C_PIN          PIND           /* I2C port input pins register */
 #define I2C_SDA          PD0            /* port pin used for SDA */
 #define I2C_SCL          PD1            /* port pin used for SCL */
-#endif
+//#endif
 
 
 
@@ -625,7 +625,7 @@
  *  - uses LCD_CS to support rotary encoder in parallel at PD2/3
  */
 
-//#if 0
+#if 0
 #define LCD_ST7565R                     /* display controller ST7565R */
 #define LCD_GRAPHIC                     /* graphic display */
 #define LCD_SPI                         /* SPI interface */
@@ -668,7 +668,7 @@
 #define SPI_DDR          LCD_DDR        /* SPI port data direction register */
 #define SPI_SCK          LCD_SCL        /* port pin used for SCK */
 #define SPI_MOSI         LCD_SI         /* port pin used for MOSI */
-//#endif
+#endif
 
 
 
