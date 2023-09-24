@@ -86,7 +86,7 @@
 /* control lines */
 #define LCD_PORT         PORTD          /* port data register */
 #define LCD_DDR          DDRD           /* port data direction register */
-#define LCD_RESET        PD4            /* port pin used for /RES (optional) */
+//#define LCD_RESET        PD4            /* port pin used for /RES (optional) */
 /* display settings */
 #define LCD_DOTS_X       128            /* number of horizontal dots */
 #define LCD_DOTS_Y       64             /* number of vertical dots */
@@ -106,8 +106,8 @@
 #define I2C_PORT         PORTD          /* I2C port data register */
 #define I2C_DDR          DDRD           /* I2C port data direction register */
 #define I2C_PIN          PIND           /* I2C port input pins register */
-#define I2C_SDA          PD0            /* port pin used for SDA */
-#define I2C_SCL          PD1            /* port pin used for SCL */
+#define I2C_SDA          PC4            /* port pin used for SDA */
+#define I2C_SCL          PC5            /* port pin used for SCL */
 //#endif
 
 
@@ -147,10 +147,10 @@
 #define TP2              PC1       /* test pin / probe #2 */
 #define TP3              PC2       /* test pin / probe #3 */
 
-#define TP_ZENER         PC3       /* test pin for for Zener check (10:1 voltage divider) */
-#define TP_REF           PC4       /* test pin for 2.5V reference and relay */
+//#define TP_ZENER         PC3       /* test pin for for Zener check (10:1 voltage divider) */
+//#define TP_REF           PC4       /* test pin for 2.5V reference and relay */
 #define TP_BAT           PC5       /* test pin for battery (4:1 voltage divider) */
-#define TP_LOGIC         PC3       /* test pin for Logic Probe (4:1 voltage divider) */
+//#define TP_LOGIC         PC3       /* test pin for Logic Probe (4:1 voltage divider) */
 
 
 /*
