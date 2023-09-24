@@ -69,7 +69,7 @@ endif
 # - ATmega 1284   : m1284
 # - ATmega 1284P  : m1284p
 # - ATmega 2560   : m2560
-PARTNO = m328p
+PARTNO = atmega328p
 
 # avrdude: ISP programmer, port and options
 
@@ -84,9 +84,9 @@ PARTNO = m328p
 #OPTIONS = -B 10.0
 
 # Diamex ALL-AVR/AVR-Prog
-PROGRAMMER = avrispmkII
-PORT = usb
-OPTIONS = -B 1.0
+#PROGRAMMER = avrispmkII
+#PORT = usb
+#OPTIONS = -B 1.0
 
 # Pololu USB AVR Programmer
 #PROGRAMMER = stk500v2
@@ -104,9 +104,9 @@ OPTIONS = -B 1.0
 #OPTIONS = -B 5.0
 
 # Arduino Uno bootloader via serial/USB
-#PROGRAMMER = arduino
-#PORT = /dev/ttyACM0
-#OPTIONS = -D -b 115200
+PROGRAMMER = arduino
+PORT = /dev/ttyACM0
+OPTIONS = -D -b 115200
 
 # Arduino Mega2560 bootloader via serial/USB
 #PROGRAMMER = wiring
