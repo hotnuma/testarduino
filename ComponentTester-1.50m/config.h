@@ -217,7 +217,7 @@
  */
 
 //#define HW_RING_TESTER
-#define RING_TESTER_PIN                 /* dedicated pin */
+//#define RING_TESTER_PIN                 /* dedicated pin */
 //#define RING_TESTER_PROBES              /* probes */
 
 
@@ -1385,7 +1385,7 @@
  *  - uncomment to enable
  */
 
-//#define ADC_LARGE_BUFFER_CAP
+#define ADC_LARGE_BUFFER_CAP
 
 
 
