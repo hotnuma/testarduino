@@ -103,10 +103,15 @@ PARTNO = m328p
 #PORT = usb
 #OPTIONS = -B 5.0
 
-# Arduino Uno bootloader via serial/USB
+# Arduino Uno
+#~ PROGRAMMER = arduino
+#~ PORT = /dev/ttyACM0
+#~ OPTIONS = -D -b 115200
+
+# Arduino Pro Mini
 PROGRAMMER = arduino
-PORT = /dev/ttyACM0
-OPTIONS = -D -b 115200
+PORT = /dev/ttyUSB0
+OPTIONS = -D -b 57600
 
 # Arduino Mega2560 bootloader via serial/USB
 #PROGRAMMER = wiring
