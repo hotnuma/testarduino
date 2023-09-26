@@ -103,9 +103,9 @@
 /* I2C bus */
 #define I2C_BITBANG                     /* bit-bang I2C */
 #define I2C_FAST_MODE                   /* 400kHz bus speed */
-#define I2C_PORT         PORTD          /* I2C port data register */
-#define I2C_DDR          DDRD           /* I2C port data direction register */
-#define I2C_PIN          PIND           /* I2C port input pins register */
+#define I2C_PORT         PORTC          /* I2C port data register */
+#define I2C_DDR          DDRC           /* I2C port data direction register */
+#define I2C_PIN          PINC           /* I2C port input pins register */
 #define I2C_SDA          PC4            /* port pin used for SDA */
 #define I2C_SCL          PC5            /* port pin used for SCL */
 //#endif
