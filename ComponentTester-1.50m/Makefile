@@ -29,7 +29,7 @@ MCU = atmega328
 # - 8MHz  : 8
 # - 16MHz : 16
 # - 20MHz : 20
-FREQ = 8
+FREQ = 16
 
 # oscillator type
 # - internal RC oscillator      : RC
@@ -84,9 +84,9 @@ PARTNO = m328p
 #OPTIONS = -B 10.0
 
 # Diamex ALL-AVR/AVR-Prog
-PROGRAMMER = avrispmkII
-PORT = usb
-OPTIONS = -B 1.0
+#PROGRAMMER = avrispmkII
+#PORT = usb
+#OPTIONS = -B 1.0
 
 # Pololu USB AVR Programmer
 #PROGRAMMER = stk500v2
@@ -103,10 +103,15 @@ OPTIONS = -B 1.0
 #PORT = usb
 #OPTIONS = -B 5.0
 
-# Arduino Uno bootloader via serial/USB
-#PROGRAMMER = arduino
-#PORT = /dev/ttyACM0
-#OPTIONS = -D -b 115200
+# Arduino Uno
+#~ PROGRAMMER = arduino
+#~ PORT = /dev/ttyACM0
+#~ OPTIONS = -D -b 115200
+
+# Arduino Pro Mini
+PROGRAMMER = arduino
+PORT = /dev/ttyUSB0
+OPTIONS = -D -b 57600
 
 # Arduino Mega2560 bootloader via serial/USB
 #PROGRAMMER = wiring
