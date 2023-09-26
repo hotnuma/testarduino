@@ -1177,8 +1177,8 @@
  *  - enable one
  */
 
-#define POWER_SWITCH_SOFT
-//#define POWER_SWITCH_MANUAL
+//#define POWER_SWITCH_SOFT
+#define POWER_SWITCH_MANUAL
 
 
 /*
@@ -1189,9 +1189,9 @@
  *  - uncomment one of the modes
  */
 
-//#define BAT_NONE
+#define BAT_NONE
 //#define BAT_DIRECT
-#define BAT_DIVIDER
+//#define BAT_DIVIDER
 
 
 /*
@@ -1214,8 +1214,8 @@
  *  - standard values are: R1=10k, R2=3.3k
  */
 
-#define BAT_R1           10000
-#define BAT_R2           3300
+//#define BAT_R1           10000
+//#define BAT_R2           3300
 
 
 /*
@@ -1226,7 +1226,7 @@
  *  - Schottky diode about 200mV / PNP BJT about 100mV.
  */  
 
-#define BAT_OFFSET       290
+//#define BAT_OFFSET       290
 
 
 /*
@@ -1235,7 +1235,7 @@
  *  - Voltage drop BAT_OFFSET is considered in calculation.
  */
 
-#define BAT_WEAK         7400
+//#define BAT_WEAK         7400
 
 
 /*
@@ -1244,7 +1244,7 @@
  *  - Voltage drop BAT_OFFSET is considered in calculation.
  */
 
-#define BAT_LOW          6400 
+//#define BAT_LOW          6400 
 
 
 /*
@@ -1252,7 +1252,7 @@
  *  - uncomment to enable
  */
 
-#define SAVE_POWER
+//#define SAVE_POWER
 
 
 
@@ -1286,7 +1286,7 @@
  */
 
 /* Rl in Ohms */
-#define R_LOW            680
+#define R_LOW            670
 
 /* Rh in Ohms */
 #define R_HIGH           470000
