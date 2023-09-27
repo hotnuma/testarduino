@@ -217,7 +217,7 @@
  */
 
 //#define HW_RING_TESTER
-//#define RING_TESTER_PIN                 /* dedicated pin */
+#define RING_TESTER_PIN                 /* dedicated pin */
 //#define RING_TESTER_PROBES              /* probes */
 
 
@@ -847,7 +847,7 @@
  *  - uncomment to enable
  */
 
-//#define UI_AUTOHOLD
+#define UI_AUTOHOLD
 
 
 /*
@@ -1191,7 +1191,7 @@
 
 #define BAT_NONE
 //#define BAT_DIRECT
-//#define BAT_DIVIDER
+#define BAT_DIVIDER
 
 
 /*
@@ -1214,8 +1214,8 @@
  *  - standard values are: R1=10k, R2=3.3k
  */
 
-//#define BAT_R1           10000
-//#define BAT_R2           3300
+#define BAT_R1           10000
+#define BAT_R2           3300
 
 
 /*
@@ -1226,7 +1226,7 @@
  *  - Schottky diode about 200mV / PNP BJT about 100mV.
  */  
 
-//#define BAT_OFFSET       290
+#define BAT_OFFSET       290
 
 
 /*
@@ -1235,7 +1235,7 @@
  *  - Voltage drop BAT_OFFSET is considered in calculation.
  */
 
-//#define BAT_WEAK         7400
+#define BAT_WEAK         7400
 
 
 /*
@@ -1244,7 +1244,7 @@
  *  - Voltage drop BAT_OFFSET is considered in calculation.
  */
 
-//#define BAT_LOW          6400 
+#define BAT_LOW          6400 
 
 
 /*
