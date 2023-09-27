@@ -35,39 +35,42 @@
 
 
 /*
- *  SH1106
+ *  HD44780 plus PCF8574 based backpack
  *  - I2C interface using bit-bang I2C
+ *  - if you change LCD_DB4/5/6/7 comment out LCD_DB_STD!
+ *  - PCF8574T is 0x27, PCF8574AT is 0x3f
  */
 
-#define LCD_SH1106                      /* display controller SH1106 */
-#define LCD_GRAPHIC                     /* graphic display */
-#define LCD_I2C                         /* I2C interface */
-#define LCD_I2C_ADDR     0x3c           /* SH1106's I2C address */
-/* control lines */
-#define LCD_PORT         PORTD          /* port data register */
-#define LCD_DDR          DDRD           /* port data direction register */
-//#define LCD_RESET        PD4            /* port pin used for /RES (optional) */
+#define LCD_HD44780                     /* display controller HD44780 */
+#define LCD_TEXT                        /* character display */
+#define LCD_PCF8574                     /* PCF8574 backpack */
+#define LCD_I2C_ADDR     0x27           /* PCF8574's I2C address */
+/* control and data lines */
+#define LCD_DB_STD                      /* use standard pins 4-7 for DB4-7 */
+#define LCD_DB4          PCF8574_P4     /* port pin used for DB4 */
+#define LCD_DB5          PCF8574_P5     /* port pin used for DB5 */
+#define LCD_DB6          PCF8574_P6     /* port pin used for DB6 */
+#define LCD_DB7          PCF8574_P7     /* port pin used for DB7 */
+#define LCD_RS           PCF8574_P0     /* port pin used for RS */
+#define LCD_RW           PCF8574_P1     /* port pin used for RW */
+#define LCD_EN1          PCF8574_P2     /* port pin used for E */
+#define LCD_LED          PCF8574_P3     /* port pin used for backlight */
 /* display settings */
-#define LCD_DOTS_X       128            /* number of horizontal dots */
-#define LCD_DOTS_Y       64             /* number of vertical dots */
-#define LCD_OFFSET_X     2              /* enable x offset of 2 or 4 dots */
-#define LCD_FLIP_X                      /* enable horizontal flip */
-#define LCD_FLIP_Y                      /* enable vertical flip */
-//#define LCD_COM_SEQ                     /* COM pin layout: sequential */
-#define LCD_CONTRAST     127            /* default contrast (0-255) */
-/* font and symbols: vertically aligned & flipped, bank-wise grouping */
-#define FONT_8X8_VF                     /* 8x8 font */
-#define SYMBOLS_24X24_VFP               /* 24x24 symbols */
-//#define SYMBOLS_24X24_ALT1_VFP          /* 24x24 alternative symbols #1 */
-//#define SYMBOLS_24X24_ALT2_VFP          /* 24x24 alternative symbols #2 */
+#define LCD_CHAR_X       16             /* characters per line */
+#define LCD_CHAR_Y       2              /* number of lines */
+//#define LCD_BACKLIGHT_LOW               /* backlight is low active */
+/* HD44780 has an internal 5x7 font */
+#define FONT_HD44780_INT                /* International font (English) */
+//#define FONT_HD44780_WIN1251             /* Cyrillic font (European) */
 /* I2C bus */
 #define I2C_BITBANG                     /* bit-bang I2C */
-#define I2C_FAST_MODE                   /* 400kHz bus speed */
+#define I2C_STANDARD_MODE               /* 100kHz bus speed */
 #define I2C_PORT         PORTC          /* I2C port data register */
 #define I2C_DDR          DDRC           /* I2C port data direction register */
 #define I2C_PIN          PINC           /* I2C port input pins register */
 #define I2C_SDA          PC4            /* port pin used for SDA */
 #define I2C_SCL          PC5            /* port pin used for SCL */
+
 
 
 /* ************************************************************************
