@@ -924,7 +924,7 @@
  *    until it's powered off manually.
  */
 
-#define CYCLE_MAX        5
+#define CYCLE_MAX        255
 
 
 /*

@@ -3081,10 +3081,12 @@ cycle_control:
   {
     Key = KEY_MAINMENU;            /* signal main menu */
   }
+  #if 0
   else if (Key == KEY_LONG)        /* long key press */
   {
     Key = KEY_POWER_OFF;           /* signal power off */
   }
+  #endif
   #ifdef HW_KEYS
   else if (Key == KEY_LEFT)        /* rotary encoder: left turn */
   {
