@@ -3,7 +3,7 @@
 ###############################################################################
 
 ## General Flags
-PROJECT = mega328_2X16_menu
+PROJECT = m328_4x20_I2C
 
 CC = avr-gcc
 
@@ -113,6 +113,8 @@ UI_LANGUAGE = LANG_ENGLISH
 # The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
 # A pull up resistor of about 4.7k is required for both signals to 3.3V.
 # Please check, if your display module can also tolerate a 5V signal level.
+# I2C converter boards for character displays (PCF8574 chip) are also supported.
+# The default I2C address is 0x27 for this converter and the internal LCD_INTERFACE_MODE is 22.
 # For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 # For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
@@ -127,21 +129,21 @@ CFLAGS += -DLCD_INTERFACE_MODE=2
 #CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
-CFLAGS += -DLCD_I2C_ADDR=0x27
+#CFLAGS += -DLCD_I2C_ADDR=0x27
 
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
 # Good values are e.g. 4 or 7. If unsure just have a try.
-#LCD_ST7565_RESISTOR_RATIO = 4
+LCD_ST7565_RESISTOR_RATIO = 4
 
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-#CFLAGS += -DLCD_ST7565_H_FLIP=1
+CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-#CFLAGS += -DLCD_ST7565_H_OFFSET=4
+CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-#CFLAGS += -DLCD_ST7565_V_FLIP=0
+CFLAGS += -DLCD_ST7565_V_FLIP=0
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
 #CFLAGS += -DVOLUME_VALUE=25
@@ -249,7 +251,7 @@ CFLAGS += -DC_H_KORR=0
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-#CFLAGS += -DWITH_VEXT
+CFLAGS += -DWITH_VEXT
 
 #
 # If you want to measure Inductors with the resistance meter, you must specify
@@ -323,7 +325,7 @@ CFLAGS += -DANZ_MESS=25
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
 #CFLAGS += -DPOWER_OFF=5
-#CFLAGS += -DPOWER_OFF
+CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
@@ -369,7 +371,7 @@ INHIBIT_SLEEP_MODE = 0
 # Select your programmer type, speed and port, if you wish to use avrdude.
 # setting for DIAMEX ALL_AVR, Atmel AVRISP-mkII
 #PROGRAMMER=avrisp2
-#BitClock=5.0
+#BitClock=1.0
 #PORT=usb
 # setting for USBasp
 #PROGRAMMER=usbasp
@@ -380,13 +382,11 @@ INHIBIT_SLEEP_MODE = 0
 #PORT = /dev/ttyACM0
 #BitClock=5.0
 #AVRDUDE_BAUD = -b 115200 -D
-
 # Arduino Pro Mini
 PROGRAMMER = arduino
 BitClock=5.0
 PORT = /dev/ttyUSB0
 AVRDUDE_BAUD = -D -b 57600
-
 # ********************** end of selectable options
 
 include ../setup.mk

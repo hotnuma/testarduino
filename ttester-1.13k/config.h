@@ -156,12 +156,12 @@
  #define TP2 PC1
  #define TP3 PC2
  // Port pin for external Voltage measurement (zener voltage extension) PC3
- //#define TPext ((1<<MUX1) | (1<<MUX0))
- // Port pin for 2.5V precision reference used for VCC check (optional) PC6
- #define TPREF PC6 //(1<<MUX2) 
- #define TPRELAY PC6
- // Port pin for Battery voltage measuring PC7
- //#define TPBAT PC7		/* identical to ((1<<MUX2) | (1<<MUX0)) */
+ #define TPext ((1<<MUX1) | (1<<MUX0))
+ // Port pin for 2.5V precision reference used for VCC check (optional) PC4
+ #define TPREF (1<<MUX2) 
+ #define TPRELAY PC4
+ // Port pin for Battery voltage measuring PC5
+ #define TPBAT PC5		/* identical to ((1<<MUX2) | (1<<MUX0)) */
  // option WITH_VEXT can be set automatically, if WITH_UART is unset
  #define TPCAP -1
 #endif	/* PROCESSOR_TYP */
@@ -775,11 +775,11 @@
    #define HW_LCD_SDA_PIN          4
 				/* --------------------------------------------- */
  #else				/* mega8/168/328 with I2C interface  */
-   #define HW_LCD_SCL_PORT         PORTC
-   #define HW_LCD_SCL_PIN          PC5
+   #define HW_LCD_SCL_PORT         PORTD
+   #define HW_LCD_SCL_PIN          5
 
-   #define HW_LCD_SDA_PORT         PORTC
-   #define HW_LCD_SDA_PIN          PC4
+   #define HW_LCD_SDA_PORT         PORTD
+   #define HW_LCD_SDA_PIN          2
  #endif	/* PROCESSOR_TYP for the I2C Interface */
 /* ----------------------------------------------------------------------------- */
 #elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) || (LCD_INTERFACE_MODE == MODE_1803_SERIAL)
