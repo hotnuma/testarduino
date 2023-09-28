@@ -60,7 +60,7 @@ CFLAGS += -DWITH_FREQUENCY_DIVIDER
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-CFLAGS += -DWITH_ROTARY_SWITCH=2
+#CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
@@ -117,7 +117,7 @@ UI_LANGUAGE = LANG_ENGLISH
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 # For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
 # The RS (data/command) signal at PD1 is used as chip enable SCE.
-#CFLAGS += -DLCD_INTERFACE_MODE=2
+CFLAGS += -DLCD_INTERFACE_MODE=22
 
 # With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.
 # With option LCD_SPI_OPEN_COL the signals are switched to GND only, for high signals the pullup resistors
@@ -132,16 +132,16 @@ UI_LANGUAGE = LANG_ENGLISH
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
 # Good values are e.g. 4 or 7. If unsure just have a try.
-LCD_ST7565_RESISTOR_RATIO = 4
+#LCD_ST7565_RESISTOR_RATIO = 4
 
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-CFLAGS += -DLCD_ST7565_H_FLIP=1
+#CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-CFLAGS += -DLCD_ST7565_H_OFFSET=4
+#CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-CFLAGS += -DLCD_ST7565_V_FLIP=0
+#CFLAGS += -DLCD_ST7565_V_FLIP=0
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
 #CFLAGS += -DVOLUME_VALUE=25
@@ -249,7 +249,7 @@ CFLAGS += -DC_H_KORR=0
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-CFLAGS += -DWITH_VEXT
+#CFLAGS += -DWITH_VEXT
 
 #
 # If you want to measure Inductors with the resistance meter, you must specify
@@ -276,7 +276,7 @@ CFLAGS += -DESR_ZERO=20
 CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
-OP_MHZ = 8
+OP_MHZ = 16
 
 # Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
@@ -323,11 +323,11 @@ CFLAGS += -DANZ_MESS=25
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
 #CFLAGS += -DPOWER_OFF=5
-CFLAGS += -DPOWER_OFF
+#CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
-CFLAGS += -DBAT_CHECK
+#CFLAGS += -DBAT_CHECK
 
 # The BAT_OUT option enables Battery Voltage Output on LCD (if BAT_CHECK is selected).
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
@@ -368,9 +368,9 @@ INHIBIT_SLEEP_MODE = 0
 
 # Select your programmer type, speed and port, if you wish to use avrdude.
 # setting for DIAMEX ALL_AVR, Atmel AVRISP-mkII
-PROGRAMMER=avrisp2
-BitClock=5.0
-PORT=usb
+#PROGRAMMER=avrisp2
+#BitClock=5.0
+#PORT=usb
 # setting for USBasp
 #PROGRAMMER=usbasp
 #BitClock=20
@@ -380,6 +380,13 @@ PORT=usb
 #PORT = /dev/ttyACM0
 #BitClock=5.0
 #AVRDUDE_BAUD = -b 115200 -D
+
+# Arduino Pro Mini
+PROGRAMMER = arduino
+BitClock=5.0
+PORT = /dev/ttyUSB0
+AVRDUDE_BAUD = -D -b 57600
+
 # ********************** end of selectable options
 
 include ../setup.mk
