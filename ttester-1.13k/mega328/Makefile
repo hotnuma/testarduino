@@ -117,7 +117,7 @@ UI_LANGUAGE = LANG_ENGLISH
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 # For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
 # The RS (data/command) signal at PD1 is used as chip enable SCE.
-CFLAGS += -DLCD_INTERFACE_MODE=22
+CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.
 # With option LCD_SPI_OPEN_COL the signals are switched to GND only, for high signals the pullup resistors
@@ -127,7 +127,7 @@ CFLAGS += -DLCD_INTERFACE_MODE=22
 #CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
-#CFLAGS += -DLCD_I2C_ADDR=0x3d
+CFLAGS += -DLCD_I2C_ADDR=0x27
 
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
