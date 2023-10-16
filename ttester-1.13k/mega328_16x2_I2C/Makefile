@@ -29,13 +29,13 @@ PARTNO = m328p
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 
-CFLAGS += -DWITH_MENU
+#CFLAGS += -DWITH_MENU
 #
 # For ATmega328 the menu function "rotary encoder check" is only enabled with the WITH_ROTARY_CHECK option.
 #CFLAGS += -DWITH_ROTARY_CHECK
 #
 # Option NO_FREQ_COUNTER will disable the frequency counter function.
-#CFLAGS += -DNO_FREQ_COUNTER
+CFLAGS += -DNO_FREQ_COUNTER
 
 CFLAGS += -DWITH_FREQUENCY_DIVIDER
 
