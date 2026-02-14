@@ -6,11 +6,10 @@
 #define NUMCHARS 16
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, NUMCHARS, 2);
 
-char strFreq[NUMCHARS + 1] = {0};
-
 char SetRegister(char registerNumber)
 {
     DDRC |= 0b00001111; // set A0-A3 as outputs
+    
     switch (registerNumber)
     {
     case (3):
@@ -88,10 +87,13 @@ uint32_t ReadCount()
     value += ReadRegister(0);
 
     return value;
-
-    //SerialSendLongASCII(value);
-    //SerialSendBreak();
 }
+
+char strFreq[NUMCHARS + 1] = {0};
+uint32_t countLast = 0;
+uint32_t countNow = 0;
+uint32_t countDiff = 0;
+bool need_update = false;
 
 void setup()
 {
@@ -101,16 +103,21 @@ void setup()
 
 void loop()
 {
-    //~ if (gpsFreq.isBusy)
-        //~ return;
+    if (!need_update)
+        return;
 
     lcd.clear();
+
+    countNow = ReadCount();
+    countDiff = countNow - countLast;
 
     //gpsFreq.formatFreq(strFreq);
     lcd.setCursor(2, 0);
     lcd.print(strFreq);
 
+    countLast = countNow;
+    need_update = 0;
+
     //gpsFreq.start(1);
 }
-
 
