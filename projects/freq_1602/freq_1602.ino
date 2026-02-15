@@ -25,4 +25,3 @@ void loop()
     gpsFreq.start(1);
 }
 
-
