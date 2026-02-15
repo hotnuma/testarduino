@@ -23,29 +23,20 @@ class CounterIC
 {
 	public:
 		
-		CounterIC(ShiftRegIC *sreg) : serial_output(sreg)
-		{
-			GAL_pin = 255;
-			GAU_pin = 255;
-			GBL_pin = 255;
-			GBU_pin = 255;
-		}
+		CounterIC() {}
 
-        void init(uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl);
-        void set_serial_conn(ShiftRegIC* s);
-
+        void init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl);
 		uint32_t readCounter32();
-
-        ShiftRegIC *serial_output;
-        uint8_t GAL_pin;
-		uint8_t GAU_pin;
-		uint8_t GBL_pin;
-		uint8_t GBU_pin;
 
 	private:
         
-		uint32_t _readCounter(uint8_t cnum);
         uint32_t _readRegister(uint8_t up_pin, uint8_t low_pin);
+        
+        ShiftRegIC *_serial_output = NULL;
+		uint8_t _GAU_pin = 255;
+        uint8_t _GAL_pin = 255;
+		uint8_t _GBU_pin = 255;
+		uint8_t _GBL_pin = 255;
 };
 
 #endif /* COUNTER_H_ */

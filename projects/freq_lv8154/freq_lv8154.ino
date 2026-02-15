@@ -3,12 +3,12 @@
 #include "shiftreg.h"
 #include "math.h"
 
+CounterIC counter;
 ShiftRegIC shift;
-CounterIC counter(&shift);
 
 void setup()
 {
-	counter.init(D10, D11, D12, D13);
+	counter.init(&shift, 10, 11, 12, 13);
 
 	shift.CLK_pin = 40;
 	shift.QH_pin = 22;

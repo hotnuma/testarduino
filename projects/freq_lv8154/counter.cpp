@@ -18,55 +18,31 @@
 #include "shiftreg.h"
 #include <math.h>
 
-void CounterIC::set_serial_conn(ShiftRegIC *sreg)
+void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl)
 {
-	serial_output = sreg;
-}
+	_serial_output = sreg;
 
-void CounterIC::init(uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl)
-{
-    GAU_pin = gau;
-    GAL_pin = gal;
-    GBU_pin = gbu;
-    GBL_pin = gbl;
+    _GAU_pin = gau;
+    _GAL_pin = gal;
+    _GBU_pin = gbu;
+    _GBL_pin = gbl;
 
-    pinMode(GAL_pin, OUTPUT);
-    pinMode(GAU_pin, OUTPUT);
-    pinMode(GBL_pin, OUTPUT);
-    pinMode(GBU_pin, OUTPUT);
-    digitalWrite(GAL_pin, HIGH);
-    digitalWrite(GAU_pin, HIGH);
-    digitalWrite(GBL_pin, HIGH);
-    digitalWrite(GBU_pin, HIGH);
+    pinMode(_GAU_pin, OUTPUT);
+    pinMode(_GAL_pin, OUTPUT);
+    pinMode(_GBU_pin, OUTPUT);
+    pinMode(_GBL_pin, OUTPUT);
+    digitalWrite(_GAU_pin, HIGH);
+    digitalWrite(_GAL_pin, HIGH);
+    digitalWrite(_GBU_pin, HIGH);
+    digitalWrite(_GBL_pin, HIGH);
 }
 
 uint32_t CounterIC::readCounter32()
 {
-    uint32_t high_byte = readCounter(0);
-    uint32_t low_byte = readCounter(1);
-	
-    uint32_t ret = (high_byte << 16) | low_byte;
+    uint32_t high_byte = _readRegister(_GAU_pin, _GAL_pin);
+    uint32_t low_byte = _readRegister(_GBU_pin, _GBL_pin);
 
-	return ret;
-}
-
-uint32_t CounterIC::_readCounter(uint8_t cnum)
-{
-	uint32_t result = 0x00;
-
-    //~ digitalWrite(RCLK_pin, HIGH);
-    //~ delayMicroseconds(2);
-    //~ digitalWrite(RCLK_pin, LOW);
-
-	// read counter A
-	if (cnum == 0)
-		result = _readRegister(GAU_pin, GAL_pin);
-
-	// read counter B
-	else if (cnum == 1)
-		result = _readRegister(GBU_pin, GBL_pin);
-
-	return result;
+	return (high_byte << 16) | low_byte;
 }
 
 uint32_t CounterIC::_readRegister(uint8_t up_pin, uint8_t low_pin)
@@ -74,14 +50,14 @@ uint32_t CounterIC::_readRegister(uint8_t up_pin, uint8_t low_pin)
     digitalWrite(up_pin, LOW);
     delayMicroseconds(2);
 
-    uint32_t data_out = serial_output->readByte(true);
+    uint32_t data_out = _serial_output->readByte(true);
 
     digitalWrite(up_pin, HIGH);
 
     digitalWrite(low_pin, LOW);
     delayMicroseconds(2);
 
-    data_out = (data_out << 8) | serial_output->readByte(true);
+    data_out = (data_out << 8) | _serial_output->readByte(true);
 
     digitalWrite(low_pin, HIGH);
 
