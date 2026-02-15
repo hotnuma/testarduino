@@ -23,109 +23,29 @@ class CounterIC
 {
 	public:
 		
-        ShiftRegIC *serial_output;
-		
-        uint8_t GAL_pin;
-		uint8_t GAU_pin;
-		uint8_t GBL_pin;
-		uint8_t GBU_pin;
-		uint8_t CCLR_pin;
-		uint8_t RCLK_pin;
-
-		CounterIC(ShiftRegIC* s) : serial_output(s)
+		CounterIC(ShiftRegIC *sreg) : serial_output(sreg)
 		{
 			GAL_pin = 255;
 			GAU_pin = 255;
 			GBL_pin = 255;
 			GBU_pin = 255;
-			CCLR_pin = 255;
-			RCLK_pin = 255;
-			RCOA_pin = 255;
-			CLKBEN_pin = 255;
-			a_trig_pin = 255;
-			b_trig_pin = 255;
-			a_freq = 0;
-			b_freq = 0;
-			_clkBenable = false;
-			_updateRunning = false;
-			_single = false;
-			_overflow = false;
-			_toggle = false;
-			_shift = false;
-			_clear = false;
-			_testA = false;
-			_testB = false;
-			_resetTimers = false;
-			_resetTimer1 = false;
-			_resetTimer2 = false;
-			_resetTimer3 = false;
-			t0_1 = 0;
-			t0_2 = 0;
-			t0_3 = 0;
-			tf_1 = 0;
-			tf_2 = 0;
-			tf_3 = 0;
-			testA_delay = 0;
-			testB_delay = 0;
 		}
 
-		//Pin setting functions
-        //~ void set_data_pins(uint8_t pins[8]);
-        //~ void set_gate_pins(uint8_t gau, uint8_t gal);
-        //~ void set_gate_pins(uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl);
+        void init(uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl);
+        void set_serial_conn(ShiftRegIC* s);
 
-        //~ void set_clear_pin(uint8_t cclr);
-        //~ void set_regclock_pin(uint8_t rclk);
+		uint32_t readCounter32();
 
-        //~ void set_rcoa_pin(uint8_t rcoa);
-        //~ void set_clkben_pin(uint8_t clkben);
-        //~ void set_test_pins(uint8_t a);
-        //~ void set_test_pins(uint8_t a, uint8_t b);
-
-        //~ //Configuration functions
-        //~ void set_testA_freq(uint32_t fa);
-        //~ void set_testB_freq(uint32_t fb);
-        //~ void set_serial_conn(ShiftRegIC* s);
-
-        //~ //Initialization function
-        //~ void init();
-
-        //~ //Update function
-        //~ void update();
-
-		//Counter functions
-		uint32_t readCounter(const char* ab);
-		uint32_t readCounter_32bit();
-		
-        //~ void clearCounters();
-		//~ void toggleCounterB();
-		//~ bool enabledCounterB();
-		//~ bool overFlow();
+        ShiftRegIC *serial_output;
+        uint8_t GAL_pin;
+		uint8_t GAU_pin;
+		uint8_t GBL_pin;
+		uint8_t GBU_pin;
 
 	private:
-		//~ bool _clkBenable;
-		//~ bool _updateRunning;
-		//~ bool _single;
-		//~ bool _overflow;
-		//~ bool _toggle;
-		//~ bool _shift;
-		//~ bool _clear;
-		//~ bool _testA;
-		//~ bool _testB;
-		//~ bool _resetTimers;
-		//~ bool _resetTimer1;
-		//~ bool _resetTimer2;
-		//~ bool _resetTimer3;
-		//~ uint32_t t0_1;
-		//~ uint32_t t0_2;
-		//~ uint32_t t0_3;
-		//~ uint32_t tf_1;
-		//~ uint32_t tf_2;
-		//~ uint32_t tf_3;
-		//~ uint32_t testA_delay;
-		//~ uint32_t testB_delay;
-		//~ uint32_t readDataPins();
-
+        
+		uint32_t _readCounter(uint8_t cnum);
+        uint32_t _readRegister(uint8_t up_pin, uint8_t low_pin);
 };
 
 #endif /* COUNTER_H_ */
