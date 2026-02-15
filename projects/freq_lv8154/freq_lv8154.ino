@@ -9,13 +9,7 @@ ShiftRegIC shift;
 void setup()
 {
 	counter.init(&shift, 10, 11, 12, 13);
-
-	shift.CLK_pin = 40;
-	shift.QH_pin = 22;
-	shift.SHLD_pin = 38;
-	
-    shift.set_clock_freq(1000);
-	shift.init();
+    shift.init(1000, 14, 15, 16);
 
 	Serial.begin(115200);
 }

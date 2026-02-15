@@ -18,26 +18,17 @@
 #include "Arduino.h"
 
 
-class ShiftRegIC {
-
+class ShiftRegIC
+{
 	public:
-		uint8_t SHLD_pin;
-		uint8_t CLK_pin;
-		uint8_t SER_pin;
-		uint8_t QH_pin;
-		uint8_t QHbar_pin;
-		uint32_t clk_freq;
-
+		
 		ShiftRegIC()
 		{
-			SHLD_pin = 255;
-			CLK_pin = 255;
-			SER_pin = 255;
-			QH_pin = 255;
-			QHbar_pin = 255;
-			clk_freq = 1000;
+			_CLK_pin = 255;
+			_SHLD_pin = 255;
+			_QH_pin = 255;
 			_complement = false;
-			_complement_set = false;
+
 			_shld = false;
 			_resetTimer = false;
 			t0 = 0;
@@ -45,37 +36,36 @@ class ShiftRegIC {
 			timer_delay = 0;
 		}
 
-		//Pin setting functions
-		void set_SHLD_pin(uint8_t p);
-		void set_CLK_pin(uint8_t p);
-		void set_SER_pin(uint8_t p);
-		void set_QH_pin(uint8_t p);
-		void set_QHbar_pin(uint8_t p);
-		void set_clock_freq(uint32_t f);
+		// initialization function
+		void init(uint32_t clk_freq,
+                  uint8_t clk_pin,
+                  uint8_t shld_pin,
+                  uint8_t qh_pin,
+                  bool complement = false);
 
-		//Initialization function
-		void init();
-
-		//Serial clock update function
+		// serial clock update function
 		void updateClock();
 
-		//Shift register functions
+		// shift register functions
 		uint32_t readByte(bool load_switch);
 		void loadData();
 
 	private:
-		bool _complement;
-		bool _complement_set;
+		
+		void _shiftIn(uint32_t *data_out);
+        
+        uint8_t _SHLD_pin;
+        uint8_t _CLK_pin;
+        uint8_t _QH_pin;
+        bool _complement;
+
 		bool _shld;
 		bool _resetTimer;
-		uint32_t t0;
+		
+        uint32_t t0;
 		uint32_t tf;
 		uint32_t timer_delay;
-		void shiftIn(uint32_t* data_out);
-
 };
 
-
-
-
 #endif /* SHIFTREG_H_ */
+
