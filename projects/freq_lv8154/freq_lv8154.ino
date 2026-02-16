@@ -8,7 +8,7 @@
 
 void setup()
 {
-	Serial.begin(115200);
+	Serial.begin(9600);
 	
     //counter.init(&shift, 10, 11, 12, 13);
     
