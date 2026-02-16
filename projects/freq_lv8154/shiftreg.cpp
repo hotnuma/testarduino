@@ -19,21 +19,22 @@ void ShiftRegIC::init(uint32_t clk_freq,
                       uint8_t clk_pin,
                       uint8_t shld_pin,
                       uint8_t qh_pin,
-                      bool complement = false)
+                      bool complement)
 {
-    // initialize clock
+    // clock output
     _CLK_pin = clk_pin;
     pinMode(_CLK_pin, OUTPUT);
     digitalWrite(_CLK_pin, LOW);
     timer_delay = (uint32_t) round((1.0 / clk_freq) * 1E6);
     _resetTimer = true;
 
+    // shift/load output
     _SHLD_pin = shld_pin;
     _shld = true;
     pinMode(_SHLD_pin, OUTPUT);
     digitalWrite(_SHLD_pin, HIGH);
 
-    // initialize serial input pin(s)
+    // serial input
     _QH_pin = qh_pin;
     _complement = complement;
     pinMode(_QH_pin, INPUT);

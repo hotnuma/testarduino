@@ -54,8 +54,8 @@ class ShiftRegIC
 		
 		void _shiftIn(uint32_t *data_out);
         
-        uint8_t _SHLD_pin;
         uint8_t _CLK_pin;
+        uint8_t _SHLD_pin;
         uint8_t _QH_pin;
         bool _complement;
 
