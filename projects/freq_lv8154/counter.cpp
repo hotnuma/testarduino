@@ -49,16 +49,12 @@ uint32_t CounterIC::_readRegister(uint8_t up_pin, uint8_t low_pin)
 {
     digitalWrite(up_pin, LOW);
     delayMicroseconds(2);
-
     uint32_t data_out = _serial_output->readByte(true);
-
     digitalWrite(up_pin, HIGH);
 
     digitalWrite(low_pin, LOW);
     delayMicroseconds(2);
-
     data_out = (data_out << 8) | _serial_output->readByte(true);
-
     digitalWrite(low_pin, HIGH);
 
     return data_out;

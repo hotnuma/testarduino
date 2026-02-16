@@ -30,35 +30,13 @@ void ShiftRegIC::init(uint32_t clk_freq,
 
     // shift/load output
     _SHLD_pin = shld_pin;
-    _shld = true;
+    //_shld = true;
     pinMode(_SHLD_pin, OUTPUT);
     digitalWrite(_SHLD_pin, HIGH);
 
     // serial input
     _QH_pin = qh_pin;
-    _complement = complement;
     pinMode(_QH_pin, INPUT);
-}
-
-void ShiftRegIC::updateClock()
-{
-    /* This function handles updates to the serial clock */
-
-    t0 = micros();
-    tf = micros();
-
-    while (tf - t0 <= timer_delay)
-        tf = micros();
-    
-    digitalWrite(_CLK_pin, !digitalRead(_CLK_pin));
-
-    t0 = micros();
-    tf = micros();
-
-    while (tf - t0 <= timer_delay)
-        tf = micros();
-
-    digitalWrite(_CLK_pin, !digitalRead(_CLK_pin));
 }
 
 uint32_t ShiftRegIC::readByte(bool load_switch)
@@ -69,80 +47,65 @@ uint32_t ShiftRegIC::readByte(bool load_switch)
     
     uint32_t data_out = 0x00;
 
-    if (_shld && load_switch)
-    {
+    if (load_switch)
         loadData();
-        _shiftIn(&data_out);
-    }
-    else if (_shld && !load_switch)
-    {
-        _shiftIn(&data_out);
-    }
-    else if (!_shld)
-    {
-        Serial.println("warning:  From ShiftRegIC::readByte() -- Load switch argument ignored because SHLD_pin is undefined.");
-        _shiftIn(&data_out);
-    }
+
+    _shiftIn(&data_out);
 
     return data_out;
 }
 
 void ShiftRegIC::loadData()
 {
-    /* Toggles SH/LD pin low on the SN54HC165 */
-    
-    if (_shld)
-    {
-        digitalWrite(_SHLD_pin, LOW);
-        delayMicroseconds(2);
-        digitalWrite(_SHLD_pin, HIGH);
-        delayMicroseconds(2);
-    }
-    else
-    {
-        Serial.println("warning:  From ShiftRegIC::loadData() -- Cannot load data because SHLD_pin is undefined.");
-    }
+    // Toggles SH/LD pin low on the SN54HC165
+
+    digitalWrite(_SHLD_pin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(_SHLD_pin, HIGH);
+    delayMicroseconds(2);
 }
 
 void ShiftRegIC::_shiftIn(uint32_t *data_out)
 {
-    /* Reads serial data from the SN54HC165 */
+    // Reads serial data from the SN54HC165
     
     (*data_out) = 0x00;
 
-    if (_complement)
+    for (int i = 0; i < 8; ++i)
     {
-        for (int i = 0; i < 8; ++i)
+        if (i == 0)
         {
-            if (i == 0)
-            {
-                (*data_out) = digitalRead(_QH_pin);
-            }
-            else
-            {
-                updateClock();
-                (*data_out) = ((*data_out) << 1) | digitalRead(_QH_pin);
-            }
+            (*data_out) = digitalRead(_QH_pin);
         }
-    }
-    else
-    {
-        for (int i = 0; i < 8; ++i)
+        else
         {
-            if (i == 0)
-            {
-                (*data_out) = digitalRead(_QH_pin);
-            }
-            else
-            {
-                updateClock();
-                (*data_out) = ((*data_out) << 1) | digitalRead(_QH_pin);
-            }
+            _updateClock();
+            (*data_out) = ((*data_out) << 1) | digitalRead(_QH_pin);
         }
     }
 
-    updateClock();
-
+    _updateClock();
     digitalWrite(_CLK_pin, LOW);
+}
+
+void ShiftRegIC::_updateClock()
+{
+    // This function handles updates to the serial clock
+
+    t0 = micros();
+    tf = micros();
+
+    while (tf - t0 <= timer_delay)
+        tf = micros();
+    
+    digitalWrite(_CLK_pin, !digitalRead(_CLK_pin));
+
+    t0 = micros();
+    tf = micros();
+
+    while (tf - t0 <= timer_delay)
+        tf = micros();
+
+    digitalWrite(_CLK_pin, !digitalRead(_CLK_pin));
 }
 

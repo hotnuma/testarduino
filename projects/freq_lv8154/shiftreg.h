@@ -17,7 +17,6 @@
 
 #include "Arduino.h"
 
-
 class ShiftRegIC
 {
 	public:
@@ -27,41 +26,32 @@ class ShiftRegIC
 			_CLK_pin = 255;
 			_SHLD_pin = 255;
 			_QH_pin = 255;
-			_complement = false;
 
-			_shld = false;
 			_resetTimer = false;
 			t0 = 0;
 			tf = 0;
 			timer_delay = 0;
 		}
 
-		// initialization function
 		void init(uint32_t clk_freq,
                   uint8_t clk_pin,
                   uint8_t shld_pin,
                   uint8_t qh_pin,
                   bool complement = false);
 
-		// serial clock update function
-		void updateClock();
-
-		// shift register functions
-		uint32_t readByte(bool load_switch);
+		uint32_t readByte(bool load_switch = true);
 		void loadData();
 
 	private:
 		
 		void _shiftIn(uint32_t *data_out);
+		void _updateClock();
         
         uint8_t _CLK_pin;
         uint8_t _SHLD_pin;
         uint8_t _QH_pin;
-        bool _complement;
 
-		bool _shld;
 		bool _resetTimer;
-		
         uint32_t t0;
 		uint32_t tf;
 		uint32_t timer_delay;
