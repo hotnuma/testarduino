@@ -18,6 +18,8 @@
 #include "shiftreg.h"
 #include <math.h>
 
+CounterIC counter;
+
 void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl)
 {
 	_serial_output = sreg;
@@ -39,9 +41,8 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, ui
 
 void CounterIC::start(uint8_t period)
 {
-    status = 0;
-    gatePeriod = period;
     gateInterrupts = 0;
+    gatePeriod = period;
 
     EICRA = _BV(ISC01);     // external interrupt on falling edge
     EIFR = _BV(INTF0);      // clear the interrupt flag (setting ISCnn can cause an interrupt)
@@ -50,24 +51,24 @@ void CounterIC::start(uint8_t period)
 
 ISR(INT0_vect)
 {
-    // stop counting
-    
-    if (gpsFreq.gateInterrupts >= gpsFreq.gatePeriod)
+    if (counter.gateInterrupts >= counter.gatePeriod)
     {
+        // stop counting
+        
         EIMSK = 0;      // stop external interrupt
-        ++gpsFreq.status;
+        
         //digitalWrite(LED_BUILTIN, LOW);
     }
     
-    // start counting
-    else if (gpsFreq.gateInterrupts == 0)
+    else if (counter.gateInterrupts == 0)
     {   
-        gpsFreq.status = 1;
+        // start counting
+        
         //digitalWrite(LED_BUILTIN, HIGH);
     }
     
-    ++gpsFreq.gateInterrupts;
-    ++gpsFreq.ppsTotal;
+    ++counter.gateInterrupts;
+    //++counter.ppsTotal;
 }
 
 uint32_t CounterIC::readCounter32()

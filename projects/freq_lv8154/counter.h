@@ -17,7 +17,9 @@
 
 #include "Arduino.h"
 
+class CounterIC;
 class ShiftRegIC;
+extern CounterIC counter;
 
 class CounterIC
 {
@@ -26,7 +28,11 @@ class CounterIC
 		CounterIC() {}
 
         void init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl);
+        void CounterIC::start(uint8_t period);
 		uint32_t readCounter32();
+
+        volatile uint8_t gateInterrupts = 0;    // number of interrupts (caused by the 1PPS gate signal)
+        uint8_t gatePeriod = 1;                 // gate period in seconds
 
 	private:
         
@@ -37,10 +43,6 @@ class CounterIC
         uint8_t _GAL_pin = 255;
 		uint8_t _GBU_pin = 255;
 		uint8_t _GBL_pin = 255;
-
-        volatile uint8_t status = 0;        // flag to indicate counting complete
-        uint8_t gatePeriod = 1;             // gate period in seconds
-        volatile uint8_t gateInterrupts = 0;    // number of interrupts (caused by the 1PPS gate signal)
 };
 
 #endif /* COUNTER_H_ */

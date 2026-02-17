@@ -3,7 +3,6 @@
 #include "shiftreg.h"
 #include "math.h"
 
-//CounterIC counter;
 ShiftRegIC shift;
 
 void setup()
