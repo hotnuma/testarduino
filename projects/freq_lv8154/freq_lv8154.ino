@@ -12,16 +12,32 @@ void setup()
     //counter.init(&shift, 10, 11, 12, 13);
     
     //             clk shld qh
-    shift.init(1000, 4, 3, 2);
+    shift.init(1000, 4, 5, 3);
 }
 
 void loop()
 {
-    Serial.println("test");
+    //Serial.println("test");
     
-    uint32_t result = shift.readByte();
-    Serial.println(result);
+    if (counter.status == 1)
+    {
+        Serial.println("started");
+        delay(500);
+        return;
+    }
     
-    delay(1000);
+    if (counter.status == 2)
+    {
+        Serial.println("stopped");
+        
+        // calc diff and display
+        
+        //~ uint32_t result = shift.readByte();
+        //~ Serial.println(result);
+    }
+    
+    counter.start(1);
+    
+    delay(500);
 }
 
