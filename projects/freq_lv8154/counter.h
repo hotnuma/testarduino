@@ -37,6 +37,10 @@ class CounterIC
         uint8_t _GAL_pin = 255;
 		uint8_t _GBU_pin = 255;
 		uint8_t _GBL_pin = 255;
+
+        volatile uint8_t status = 0;        // flag to indicate counting complete
+        uint8_t gatePeriod = 1;             // gate period in seconds
+        volatile uint8_t gateInterrupts = 0;    // number of interrupts (caused by the 1PPS gate signal)
 };
 
 #endif /* COUNTER_H_ */

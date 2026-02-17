@@ -37,6 +37,39 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, ui
     digitalWrite(_GBL_pin, HIGH);
 }
 
+void CounterIC::start(uint8_t period)
+{
+    status = 0;
+    gatePeriod = period;
+    gateInterrupts = 0;
+
+    EICRA = _BV(ISC01);     // external interrupt on falling edge
+    EIFR = _BV(INTF0);      // clear the interrupt flag (setting ISCnn can cause an interrupt)
+    EIMSK = _BV(INT0);      // enable external interrupt
+}
+
+ISR(INT0_vect)
+{
+    // stop counting
+    
+    if (gpsFreq.gateInterrupts >= gpsFreq.gatePeriod)
+    {
+        EIMSK = 0;      // stop external interrupt
+        ++gpsFreq.status;
+        //digitalWrite(LED_BUILTIN, LOW);
+    }
+    
+    // start counting
+    else if (gpsFreq.gateInterrupts == 0)
+    {   
+        gpsFreq.status = 1;
+        //digitalWrite(LED_BUILTIN, HIGH);
+    }
+    
+    ++gpsFreq.gateInterrupts;
+    ++gpsFreq.ppsTotal;
+}
+
 uint32_t CounterIC::readCounter32()
 {
     uint32_t high_byte = _readRegister(_GAU_pin, _GAL_pin);
