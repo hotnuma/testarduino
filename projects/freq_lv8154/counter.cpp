@@ -28,7 +28,6 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, ui
     _GAL_pin = gal;
     _GBU_pin = gbu;
     _GBL_pin = gbl;
-
     pinMode(_GAU_pin, OUTPUT);
     pinMode(_GAL_pin, OUTPUT);
     pinMode(_GBU_pin, OUTPUT);
@@ -45,34 +44,31 @@ void CounterIC::start(uint8_t period)
     gateInterrupts = 0;
     gatePeriod = period;
 
-    EICRA = _BV(ISC01);     // external interrupt on falling edge
-    EIFR = _BV(INTF0);      // clear the interrupt flag (setting ISCnn can cause an interrupt)
-    EIMSK = _BV(INT0);      // enable external interrupt
+    EICRA = _BV(ISC01); // external interrupt on falling edge
+    EIFR = _BV(INTF0);  // clear the interrupt flag (setting ISCnn can cause an interrupt)
+    EIMSK = _BV(INT0);  // enable external interrupt
 }
 
 ISR(INT0_vect)
 {
+    // stop
     if (counter.gateInterrupts >= counter.gatePeriod)
     {
-        // stop counting
-        
-        EIMSK = 0;      // stop external interrupt
+        EIMSK = 0;
         counter.status = 2;
         
         //digitalWrite(LED_BUILTIN, LOW);
     }
     
+    // start
     else if (counter.gateInterrupts == 0)
     {   
-        // start counting
-        
         counter.status = 1;
         
         //digitalWrite(LED_BUILTIN, HIGH);
     }
     
     ++counter.gateInterrupts;
-    //++counter.ppsTotal;
 }
 
 uint32_t CounterIC::readCounter32()
