@@ -41,6 +41,7 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, ui
 
 void CounterIC::start(uint8_t period)
 {
+    status = 0;
     gateInterrupts = 0;
     gatePeriod = period;
 
@@ -56,6 +57,7 @@ ISR(INT0_vect)
         // stop counting
         
         EIMSK = 0;      // stop external interrupt
+        counter.status = 2;
         
         //digitalWrite(LED_BUILTIN, LOW);
     }
@@ -63,6 +65,8 @@ ISR(INT0_vect)
     else if (counter.gateInterrupts == 0)
     {   
         // start counting
+        
+        counter.status = 1;
         
         //digitalWrite(LED_BUILTIN, HIGH);
     }

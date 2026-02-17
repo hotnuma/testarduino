@@ -31,6 +31,7 @@ class CounterIC
         void CounterIC::start(uint8_t period);
 		uint32_t readCounter32();
 
+        volatile uint8_t status = 0;
         volatile uint8_t gateInterrupts = 0;    // number of interrupts (caused by the 1PPS gate signal)
         uint8_t gatePeriod = 1;                 // gate period in seconds
 
