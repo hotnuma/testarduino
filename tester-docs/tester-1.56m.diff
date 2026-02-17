@@ -1,0 +1,178 @@
+diff --git a/tester-1.56m/Makefile b/tester-1.56m/Makefile
+index 7e22047..2822d0b 100644
+--- a/tester-1.56m/Makefile
++++ b/tester-1.56m/Makefile
+@@ -28,7 +28,7 @@ MCU = atmega328
+ # - 8MHz  : 8
+ # - 16MHz : 16
+ # - 20MHz : 20
+-FREQ = 8
++FREQ = 16
+ 
+ # oscillator type
+ # - internal RC oscillator      : RC
+@@ -83,9 +83,9 @@ PARTNO = m328p
+ #OPTIONS = -B 10.0
+ 
+ # Diamex ALL-AVR/AVR-Prog
+-PROGRAMMER = avrispmkII
+-PORT = usb
+-OPTIONS = -B 1.0
++#PROGRAMMER = avrispmkII
++#PORT = usb
++#OPTIONS = -B 1.0
+ 
+ # Pololu USB AVR Programmer
+ #PROGRAMMER = stk500v2
+@@ -102,10 +102,15 @@ OPTIONS = -B 1.0
+ #PORT = usb
+ #OPTIONS = -B 5.0
+ 
+-# Arduino Uno bootloader via serial/USB
+-#PROGRAMMER = arduino
+-#PORT = /dev/ttyACM0
+-#OPTIONS = -D -b 115200
++# Arduino Uno
++#~ PROGRAMMER = arduino
++#~ PORT = /dev/ttyACM0
++#~ OPTIONS = -D -b 115200
++
++# Arduino Pro Mini
++PROGRAMMER = arduino
++PORT = /dev/ttyUSB0
++OPTIONS = -D -b 57600
+ 
+ # Arduino Mega2560 bootloader via serial/USB
+ #PROGRAMMER = wiring
+diff --git a/tester-1.56m/config.h b/tester-1.56m/config.h
+index 9d9d39e..4a7a982 100644
+--- a/tester-1.56m/config.h
++++ b/tester-1.56m/config.h
+@@ -931,7 +931,7 @@
+  *  - uncomment to enable
+  */
+ 
+-//#define UI_AUTOHOLD
++#define UI_AUTOHOLD
+ 
+ 
+ /*
+@@ -1033,7 +1033,7 @@
+  *    until it's powered off manually.
+  */
+ 
+-#define CYCLE_MAX        5
++#define CYCLE_MAX        255
+ 
+ 
+ /*
+@@ -1309,8 +1309,8 @@
+  *  - enable one
+  */
+ 
+-#define POWER_SWITCH_SOFT
+-//#define POWER_SWITCH_MANUAL
++//#define POWER_SWITCH_SOFT
++#define POWER_SWITCH_MANUAL
+ 
+ 
+ /*
+@@ -1321,7 +1321,7 @@
+  *  - uncomment one of the modes
+  */
+ 
+-//#define BAT_NONE
++#define BAT_NONE
+ //#define BAT_DIRECT
+ #define BAT_DIVIDER
+ 
+@@ -1384,7 +1384,7 @@
+  *  - uncomment to enable
+  */
+ 
+-#define SAVE_POWER
++//#define SAVE_POWER
+ 
+ 
+ 
+@@ -1418,7 +1418,7 @@
+  */
+ 
+ /* Rl in Ohms */
+-#define R_LOW            680
++#define R_LOW            670
+ 
+ /* Rh in Ohms */
+ #define R_HIGH           470000
+@@ -1517,7 +1517,7 @@
+  *  - uncomment to enable
+  */
+ 
+-//#define ADC_LARGE_BUFFER_CAP
++#define ADC_LARGE_BUFFER_CAP
+ 
+ 
+ 
+diff --git a/tester-1.56m/config_328.h b/tester-1.56m/config_328.h
+index cf60bf0..7cd10e8 100644
+--- a/tester-1.56m/config_328.h
++++ b/tester-1.56m/config_328.h
+@@ -71,11 +71,10 @@
+  *  - PCF8574T is 0x27, PCF8574AT is 0x3f
+  */
+ 
+-#if 0
+ #define LCD_HD44780                     /* display controller HD44780 */
+ #define LCD_TEXT                        /* character display */
+ #define LCD_PCF8574                     /* PCF8574 backpack */
+-#define LCD_I2C_ADDR     0x3f           /* PCF8574's I2C address */
++#define LCD_I2C_ADDR     0x27           /* PCF8574's I2C address */
+ /* control and data lines */
+ #define LCD_DB_STD                      /* use standard pins 4-7 for DB4-7 */
+ #define LCD_DB4          PCF8574_P4     /* port pin used for DB4 */
+@@ -96,12 +95,11 @@
+ /* I2C bus */
+ #define I2C_BITBANG                     /* bit-bang I2C */
+ #define I2C_STANDARD_MODE               /* 100kHz bus speed */
+-#define I2C_PORT         PORTD          /* I2C port data register */
+-#define I2C_DDR          DDRD           /* I2C port data direction register */
+-#define I2C_PIN          PIND           /* I2C port input pins register */
+-#define I2C_SDA          PD0            /* port pin used for SDA */
+-#define I2C_SCL          PD1            /* port pin used for SCL */
+-#endif
++#define I2C_PORT         PORTC          /* I2C port data register */
++#define I2C_DDR          DDRC           /* I2C port data direction register */
++#define I2C_PIN          PINC           /* I2C port input pins register */
++#define I2C_SDA          PC4            /* port pin used for SDA */
++#define I2C_SCL          PC5            /* port pin used for SCL */
+ 
+ 
+ 
+@@ -890,8 +888,8 @@
+ #define TP3              PC2       /* test pin / probe #3 */
+ 
+ #define TP_ZENER         PC3       /* test pin for for Zener check (10:1 voltage divider) */
+-#define TP_REF           PC4       /* test pin for 2.5V reference and relay */
+-#define TP_BAT           PC5       /* test pin for battery (4:1 voltage divider) */
++#define TP_REF           PC6       /* test pin for 2.5V reference and relay */
++#define TP_BAT           PC7       /* test pin for battery (4:1 voltage divider) */
+ #define TP_LOGIC         PC3       /* test pin for Logic Probe (4:1 voltage divider) */
+ 
+ 
+diff --git a/tester-1.56m/main.c b/tester-1.56m/main.c
+index af014a3..ce930de 100644
+--- a/tester-1.56m/main.c
++++ b/tester-1.56m/main.c
+@@ -3254,10 +3254,12 @@ cycle_control:
+   {
+     Key = KEY_MAINMENU;            /* signal main menu */
+   }
++  #if 0
+   else if (Key == KEY_LONG)        /* long key press */
+   {
+     Key = KEY_POWER_OFF;           /* signal power off */
+   }
++  #endif
+   #ifdef HW_KEYS
+   else if (Key == KEY_LEFT)        /* rotary encoder: left turn */
+   {

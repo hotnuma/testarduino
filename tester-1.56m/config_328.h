@@ -71,11 +71,10 @@
  *  - PCF8574T is 0x27, PCF8574AT is 0x3f
  */
 
-#if 0
 #define LCD_HD44780                     /* display controller HD44780 */
 #define LCD_TEXT                        /* character display */
 #define LCD_PCF8574                     /* PCF8574 backpack */
-#define LCD_I2C_ADDR     0x3f           /* PCF8574's I2C address */
+#define LCD_I2C_ADDR     0x27           /* PCF8574's I2C address */
 /* control and data lines */
 #define LCD_DB_STD                      /* use standard pins 4-7 for DB4-7 */
 #define LCD_DB4          PCF8574_P4     /* port pin used for DB4 */
@@ -96,12 +95,11 @@
 /* I2C bus */
 #define I2C_BITBANG                     /* bit-bang I2C */
 #define I2C_STANDARD_MODE               /* 100kHz bus speed */
-#define I2C_PORT         PORTD          /* I2C port data register */
-#define I2C_DDR          DDRD           /* I2C port data direction register */
-#define I2C_PIN          PIND           /* I2C port input pins register */
-#define I2C_SDA          PD0            /* port pin used for SDA */
-#define I2C_SCL          PD1            /* port pin used for SCL */
-#endif
+#define I2C_PORT         PORTC          /* I2C port data register */
+#define I2C_DDR          DDRC           /* I2C port data direction register */
+#define I2C_PIN          PINC           /* I2C port input pins register */
+#define I2C_SDA          PC4            /* port pin used for SDA */
+#define I2C_SCL          PC5            /* port pin used for SCL */
 
 
 
@@ -890,8 +888,8 @@
 #define TP3              PC2       /* test pin / probe #3 */
 
 #define TP_ZENER         PC3       /* test pin for for Zener check (10:1 voltage divider) */
-#define TP_REF           PC4       /* test pin for 2.5V reference and relay */
-#define TP_BAT           PC5       /* test pin for battery (4:1 voltage divider) */
+#define TP_REF           PC6       /* test pin for 2.5V reference and relay */
+#define TP_BAT           PC7       /* test pin for battery (4:1 voltage divider) */
 #define TP_LOGIC         PC3       /* test pin for Logic Probe (4:1 voltage divider) */
 
 

@@ -931,7 +931,7 @@
  *  - uncomment to enable
  */
 
-#define UI_AUTOHOLD
+//#define UI_AUTOHOLD
 
 
 /*
@@ -1033,7 +1033,7 @@
  *    until it's powered off manually.
  */
 
-#define CYCLE_MAX        255
+#define CYCLE_MAX        5
 
 
 /*
@@ -1309,8 +1309,8 @@
  *  - enable one
  */
 
-//#define POWER_SWITCH_SOFT
-#define POWER_SWITCH_MANUAL
+#define POWER_SWITCH_SOFT
+//#define POWER_SWITCH_MANUAL
 
 
 /*
@@ -1321,7 +1321,7 @@
  *  - uncomment one of the modes
  */
 
-#define BAT_NONE
+//#define BAT_NONE
 //#define BAT_DIRECT
 #define BAT_DIVIDER
 
@@ -1384,7 +1384,7 @@
  *  - uncomment to enable
  */
 
-//#define SAVE_POWER
+#define SAVE_POWER
 
 
 
@@ -1418,7 +1418,7 @@
  */
 
 /* Rl in Ohms */
-#define R_LOW            670
+#define R_LOW            680
 
 /* Rh in Ohms */
 #define R_HIGH           470000
@@ -1517,7 +1517,7 @@
  *  - uncomment to enable
  */
 
-#define ADC_LARGE_BUFFER_CAP
+//#define ADC_LARGE_BUFFER_CAP
 
 
 
