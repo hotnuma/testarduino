@@ -624,7 +624,7 @@
  *  - uses LCD_CS to support rotary encoder in parallel at PD2/3
  */
 
-//#if 0
+#if 0
 #define LCD_ST7565R                     /* display controller ST7565R */
 #define LCD_GRAPHIC                     /* graphic display */
 #define LCD_SPI                         /* SPI interface */
@@ -667,7 +667,7 @@
 #define SPI_DDR          LCD_DDR        /* SPI port data direction register */
 #define SPI_SCK          LCD_SCL        /* port pin used for SCK */
 #define SPI_MOSI         LCD_SI         /* port pin used for MOSI */
-//#endif
+#endif
 
 
 
