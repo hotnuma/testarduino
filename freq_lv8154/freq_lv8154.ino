@@ -9,7 +9,8 @@ void setup()
 {
 	Serial.begin(9600);
 	
-    //counter.init(&shift, 10, 11, 12, 13);
+    //                  gau gal gbu gbl
+    counter.init(&shift, 12, 13, 10, 11);
     
     //             clk shld qh
     shift.init(1000, 4, 5, 3);
