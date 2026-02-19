@@ -9,36 +9,40 @@ void setup()
 {
 	Serial.begin(9600);
 	
-    //                  gau gal gbu gbl
+    //                   gau gal gbu gbl
     counter.init(&shift, 12, 13, 10, 11);
     
     //             clk shld qh
     shift.init(1000, 4, 5, 3);
 }
 
+uint8_t status = 0;
+
 void loop()
 {
-    //Serial.println("test");
+    uint32_t prev = 0;
     
-    if (counter.status == 1)
+    if (counter.status == 1 && status != 1)
     {
-        Serial.println("started");
-        delay(500);
-        return;
+        // Serial.println("started");
+        prev = counter.readCounter32();
+        status = 1;
     }
-    
-    if (counter.status == 2)
+    else if (counter.status == 2)
     {
         Serial.println("stopped");
-        
-        // calc diff and display
-        
-        //~ uint32_t result = shift.readByte();
-        //~ Serial.println(result);
+        uint32_t freq = counter.readCounter32() - prev;
+        Serial.println(freq);
+        status = 2;
+        counter.start(1);
     }
-    
-    counter.start(1);
-    
+    else
+    {
+        prev = 0;
+        status = 0;
+        counter.start(1);
+    }
+
     delay(500);
 }
 
