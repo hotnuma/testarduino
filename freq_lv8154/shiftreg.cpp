@@ -30,7 +30,6 @@ void ShiftRegIC::init(uint32_t clk_freq,
 
     // shift/load output
     _SHLD_pin = shld_pin;
-    //_shld = true;
     pinMode(_SHLD_pin, OUTPUT);
     digitalWrite(_SHLD_pin, HIGH);
 

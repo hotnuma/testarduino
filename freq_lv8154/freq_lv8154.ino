@@ -16,16 +16,16 @@ void setup()
     shift.init(1000, 4, 5, 3);
 }
 
-uint8_t status = 0;
-
 void loop()
 {
-    uint32_t prev = 0;
+    static uint32_t prev;
+    static uint8_t status;
     
-    if (counter.status == 1 && status != 1)
+    if (counter.status == 1)
     {
         // Serial.println("started");
-        prev = counter.readCounter32();
+        if (status != 1)
+            prev = counter.readCounter32();
         status = 1;
     }
     else if (counter.status == 2)
