@@ -19,27 +19,25 @@ void setup()
 void loop()
 {
     static uint32_t prev;
-    static uint8_t status;
+    static uint8_t started;
     
     if (counter.status == 1)
     {
-        // Serial.println("started");
-        if (status != 1)
+        if (started == 0)
             prev = counter.readCounter32();
-        status = 1;
+        started = 1;
     }
     else if (counter.status == 2)
     {
         Serial.println("stopped");
         uint32_t freq = counter.readCounter32() - prev;
         Serial.println(freq);
-        status = 2;
-        counter.start(1);
+        counter.status = 0;
     }
     else
     {
         prev = 0;
-        status = 0;
+        started = 0;
         counter.start(1);
     }
 
