@@ -1,46 +1,46 @@
+//#include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 #include "counter.h"
-#include "shiftreg.h"
 #include "math.h"
 
-ShiftRegIC shift;
+//LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 
 void setup()
 {
-	Serial.begin(9600);
+    //lcd.init();
+    //lcd.backlight();
+	
+    Serial.begin(9600);
 	
     //                   gau gal gbu gbl
-    counter.init(&shift, 12, 13, 10, 11);
-    
-    //             clk shld qh
-    shift.init(1000, 4, 5, 3);
+    counter.init(NULL, A1, A0, A3, A2);
+    counter.start();
 }
 
 void loop()
 {
-    static uint32_t prev;
-    static uint8_t started;
-    
-    if (counter.status == 1)
-    {
-        if (started == 0)
-            prev = counter.readCounter32();
-        started = 1;
-    }
-    else if (counter.status == 2)
-    {
-        Serial.println("stopped");
-        uint32_t freq = counter.readCounter32() - prev;
-        Serial.println(freq);
-        counter.status = 0;
-    }
-    else
-    {
-        prev = 0;
-        started = 0;
-        counter.start(1);
-    }
+    static uint32_t last;
+    static uint32_t now;
+    static uint32_t diff;
+    static uint32_t count = 0;
 
-    delay(500);
+    if (counter.triggered == 1)
+    {
+        now = counter.read();
+        diff = now - last;
+        last = now;
+
+        //~ lcd.clear();
+        //~ lcd.setCursor(2, 0);
+        //~ lcd.print(diff);
+        
+        Serial.println("--------------------------------------------");
+        Serial.println(++count);
+        //Serial.println(counter._readRegister(counter._GBU_pin, counter._GBL_pin));
+        //Serial.println(counter._readRegister(counter._GAU_pin, counter._GAL_pin));
+        Serial.println(diff);
+        
+        counter.triggered = 0;
+    }
 }
 

@@ -37,18 +37,13 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, ui
     digitalWrite(_GAL_pin, HIGH);
     digitalWrite(_GBU_pin, HIGH);
     digitalWrite(_GBL_pin, HIGH);
-    
-    for (uint8_t i = 0; i < 8; ++i)
-    {
-        pinMode(Y_PINS[i], INPUT);
-    }
 }
 
 void CounterIC::start(uint8_t period)
 {
-    //~ status = 0;
-    //~ gateInterrupts = 0;
-    //~ gatePeriod = period;
+    status = 0;
+    gateInterrupts = 0;
+    gatePeriod = period;
 
     EICRA = _BV(ISC01); // external interrupt on falling edge
     EIFR = _BV(INTF0);  // clear the interrupt flag (setting ISCnn can cause an interrupt)
@@ -57,10 +52,6 @@ void CounterIC::start(uint8_t period)
 
 ISR(INT0_vect)
 {
-    counter.triggered = 1;
-
-
-#if 0
     // stop
     if (counter.gateInterrupts >= counter.gatePeriod)
     {
@@ -79,13 +70,12 @@ ISR(INT0_vect)
     }
     
     ++counter.gateInterrupts;
-#endif
 }
 
-uint32_t CounterIC::read()
+uint32_t CounterIC::readCounter32()
 {
-    uint32_t high_byte = _readRegister(_GBU_pin, _GBL_pin);
-    uint32_t low_byte = _readRegister(_GAU_pin, _GAL_pin);
+    uint32_t high_byte = _readRegister(_GAU_pin, _GAL_pin);
+    uint32_t low_byte = _readRegister(_GBU_pin, _GBL_pin);
 
 	return (high_byte << 16) | low_byte;
 }
