@@ -12,8 +12,8 @@ void setup()
 	
     Serial.begin(9600);
 	
-    //                   gau gal gbu gbl
-    counter.init(NULL, A1, A0, A3, A2);
+    //                 gbu gbl gau gal
+    counter.init(NULL, A3, A2, A1, A0);
     counter.start();
 }
 

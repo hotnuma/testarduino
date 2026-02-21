@@ -27,7 +27,7 @@ class CounterIC
 		
 		CounterIC() {}
 
-        void init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl);
+        void init(ShiftRegIC *sreg, uint8_t gbu, uint8_t gbl, uint8_t gau, uint8_t gal);
         void CounterIC::start(uint8_t period = 1);
 		uint32_t read();
 
@@ -37,14 +37,14 @@ class CounterIC
         //~ volatile uint8_t gateInterrupts = 0;    // number of interrupts (caused by the 1PPS gate signal)
         //~ uint8_t gatePeriod = 1;                 // gate period in seconds
 
-        uint32_t _readRegister(uint8_t up_pin, uint8_t low_pin);
-		uint8_t _GAU_pin = 255;
-        uint8_t _GAL_pin = 255;
-		uint8_t _GBU_pin = 255;
-		uint8_t _GBL_pin = 255;
 	private:
         
         uint32_t _readData();
+        uint32_t _readRegister(uint8_t up_pin, uint8_t low_pin);
+		uint8_t _GBU_pin = 255;
+		uint8_t _GBL_pin = 255;
+		uint8_t _GAU_pin = 255;
+        uint8_t _GAL_pin = 255;
         
         ShiftRegIC *_shift = NULL;
 };

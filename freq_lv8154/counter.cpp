@@ -21,22 +21,22 @@
 CounterIC counter;
 const uint8_t Y_PINS[8] = {13, 12, 11, 10, 9, 8, 7, 6};
 
-void CounterIC::init(ShiftRegIC *sreg, uint8_t gau, uint8_t gal, uint8_t gbu, uint8_t gbl)
+void CounterIC::init(ShiftRegIC *sreg, uint8_t gbu, uint8_t gbl, uint8_t gau, uint8_t gal)
 {
 	_shift = sreg;
 
-    _GAU_pin = gau;
-    _GAL_pin = gal;
     _GBU_pin = gbu;
     _GBL_pin = gbl;
-    pinMode(_GAU_pin, OUTPUT);
-    pinMode(_GAL_pin, OUTPUT);
+    _GAU_pin = gau;
+    _GAL_pin = gal;
     pinMode(_GBU_pin, OUTPUT);
     pinMode(_GBL_pin, OUTPUT);
-    digitalWrite(_GAU_pin, HIGH);
-    digitalWrite(_GAL_pin, HIGH);
+    pinMode(_GAU_pin, OUTPUT);
+    pinMode(_GAL_pin, OUTPUT);
     digitalWrite(_GBU_pin, HIGH);
     digitalWrite(_GBL_pin, HIGH);
+    digitalWrite(_GAU_pin, HIGH);
+    digitalWrite(_GAL_pin, HIGH);
     
     for (uint8_t i = 0; i < 8; ++i)
     {
