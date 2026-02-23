@@ -19,7 +19,6 @@
 #include <math.h>
 
 CounterIC counter;
-const uint8_t Y_PINS[8] = {13, 12, 11, 10, 9, 8, 7, 6};
 
 void CounterIC::init(ShiftRegIC *sreg, uint8_t gbu, uint8_t gbl, uint8_t gau, uint8_t gal)
 {
@@ -38,9 +37,13 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gbu, uint8_t gbl, uint8_t gau, ui
     digitalWrite(_GAU_pin, HIGH);
     digitalWrite(_GAL_pin, HIGH);
     
+    if (_shift != NULL)
+        return;
+
     for (uint8_t i = 0; i < 8; ++i)
     {
-        pinMode(Y_PINS[i], INPUT);
+        if (y_pins[i] != 255)
+            pinMode(y_pins[i], INPUT);
     }
 }
 
@@ -96,18 +99,12 @@ uint32_t CounterIC::_readRegister(uint8_t up_pin, uint8_t low_pin)
     
     digitalWrite(up_pin, LOW);
     delayMicroseconds(2);
-    if (_shift)
-        result = _shift->readByte();
-    else
-        result = _readData();
+    result = _readData();
     digitalWrite(up_pin, HIGH);
 
     digitalWrite(low_pin, LOW);
     delayMicroseconds(2);
-    if (_shift)
-        result = (result << 8) | _shift->readByte(true);
-    else
-        result = (result << 8) | _readData();
+    result = (result << 8) | _readData();
     digitalWrite(low_pin, HIGH);
 
     return result;
@@ -115,25 +112,27 @@ uint32_t CounterIC::_readRegister(uint8_t up_pin, uint8_t low_pin)
 
 uint32_t CounterIC::_readData()
 {
-	uint32_t val = 0x00;
-	uint32_t result = 0x00;
+    if (_shift)
+        return _shift->readByte();
 
-	val = digitalRead(Y_PINS[7]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[6]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[5]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[4]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[3]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[2]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[1]);
-	result = (result << 1) | val;
-	val = digitalRead(Y_PINS[0]);
-	result = (result << 1) | val;
+    uint32_t result = 0x00;
+    uint32_t val = 0x00;
+    val = digitalRead(y_pins[7]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[6]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[5]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[4]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[3]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[2]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[1]);
+    result = (result << 1) | val;
+    val = digitalRead(y_pins[0]);
+    result = (result << 1) | val;
 
 	return result;
 }

@@ -1,17 +1,22 @@
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 #include "counter.h"
+#include "shiftreg.h"
 #include "math.h"
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
+ShiftRegIC sreg;
 
 void setup()
 {
     lcd.init();
     lcd.backlight();
+    
+    //        freq clk shld qh
+    sreg.init(1000, 10, 9, 8);
 
-    //                 gbu gbl gau gal
-    counter.init(NULL, A3, A2, A1, A0);
+    //           shift  gbu gbl gau gal
+    counter.init(&sreg, A3, A2, A1, A0);
     counter.start();
 }
 

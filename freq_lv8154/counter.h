@@ -30,7 +30,8 @@ class CounterIC
         void init(ShiftRegIC *sreg, uint8_t gbu, uint8_t gbl, uint8_t gau, uint8_t gal);
         void CounterIC::start(uint8_t period = 1);
 		uint32_t read();
-
+        
+        uint8_t y_pins[8] = {255};
         volatile uint8_t triggered = 0;
         
         //~ volatile uint8_t status = 0;
