@@ -1,4 +1,8 @@
-#### A few Arduino projects
+#### Arduino Projects
+
+* Arduino Frenquency Counter
+
+    An arduino using the gpsFreq library mesures 4.000.327 MHz while a SN74LV8154 counter mesures 4.000.331 MHz, it seems that the Arduino alone will drop 4 periodes.
 
 * tester 1.56m
     
@@ -8,3 +12,4 @@
     export PATH=$PATH:$HOME/.arduino15/packages/arduino/tools/avrdude/8.0.0-arduino1/bin/
     make upload
     ```
+

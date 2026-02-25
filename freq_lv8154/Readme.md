@@ -1,0 +1,5 @@
+#### SN74LV8154 Frequency Counter
+
+This project is based on the SN74LV8154 and SN54HC165 IC drivers by Justin Holland.
+Many thanks to the original author.
+

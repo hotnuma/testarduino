@@ -13,10 +13,10 @@ void setup()
     lcd.backlight();
     
     //        freq clk shld qh
-    sreg.init(1000, 10, 9, 8);
+    sreg.init(1000, 9, 8, 7);
 
-    //           shift  gbu gbl gau gal
-    counter.init(&sreg, A3, A2, A1, A0);
+    //          shift gbu gbl gau gal
+    counter.init(&sreg, 3, 4, 5, 6);
     counter.start();
 }
 
