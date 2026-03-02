@@ -4,8 +4,30 @@
 #include "shiftreg.h"
 #include "math.h"
 
-LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
+#define NCHARS 16
+
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, NCHARS, 2);
 ShiftRegIC sreg;
+char buffer[NCHARS + 1] = {0};
+
+void formatFreq(char *result, uint32_t freq)
+{
+    char temp[NCHARS + 1];
+
+    ltoa(freq, temp, 10);
+    char *pf = temp;
+    uint8_t len = strlen(temp);
+    
+    for (uint8_t i = 0; i < len; ++i)
+    {
+        *result++ = *pf++;
+        
+        if ((len - i - 1) % 3 == 0 && i < len-1)
+            *result++ = ' ';
+    }
+
+    *result++ = 0;
+}
 
 void setup()
 {
@@ -34,8 +56,11 @@ void loop()
         last = now;
 
         lcd.clear();
-        lcd.setCursor(2, 0);
-        lcd.print(diff);
+        lcd.setCursor(0, 0);
+        //strcpy(buffer, "                ");
+        
+        formatFreq(buffer, diff);
+        lcd.print(buffer);
         
         counter.triggered = 0;
     }

@@ -33,10 +33,6 @@ class CounterIC
         
         uint8_t y_pins[8] = {255};
         volatile uint8_t triggered = 0;
-        
-        //~ volatile uint8_t status = 0;
-        //~ volatile uint8_t gateInterrupts = 0;    // number of interrupts (caused by the 1PPS gate signal)
-        //~ uint8_t gatePeriod = 1;                 // gate period in seconds
 
 	private:
         

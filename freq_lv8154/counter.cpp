@@ -49,10 +49,6 @@ void CounterIC::init(ShiftRegIC *sreg, uint8_t gbu, uint8_t gbl, uint8_t gau, ui
 
 void CounterIC::start(uint8_t period)
 {
-    //~ status = 0;
-    //~ gateInterrupts = 0;
-    //~ gatePeriod = period;
-
     EICRA = _BV(ISC01); // external interrupt on falling edge
     EIFR = _BV(INTF0);  // clear the interrupt flag (setting ISCnn can cause an interrupt)
     EIMSK = _BV(INT0);  // enable external interrupt
@@ -61,28 +57,8 @@ void CounterIC::start(uint8_t period)
 ISR(INT0_vect)
 {
     counter.triggered = 1;
-
-
-#if 0
-    // stop
-    if (counter.gateInterrupts >= counter.gatePeriod)
-    {
-        EIMSK = 0;
-        counter.status = 2;
-        
-        //digitalWrite(LED_BUILTIN, LOW);
-    }
     
-    // start
-    else if (counter.gateInterrupts == 0)
-    {   
-        counter.status = 1;
-        
-        //digitalWrite(LED_BUILTIN, HIGH);
-    }
-    
-    ++counter.gateInterrupts;
-#endif
+    //digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 }
 
 uint32_t CounterIC::read()
