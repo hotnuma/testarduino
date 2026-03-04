@@ -7,6 +7,7 @@
 #define BLANKLINE "                "
 #define NCHARS 16
 #define MAXCOUNT 500000000
+#define LED_PIN A0
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, NCHARS, 2);
 ShiftRegIC sreg;
@@ -36,7 +37,7 @@ void printFreq(uint32_t freq)
         if (((len-1-i) % 3) == 0 && (i < len-1))
             *dest++ = ' ';
     }
-    memcpy(_buffer + 13, "  C", 3);
+    memcpy(_buffer + 13, "  H", 3);
     
     lcd.setCursor(0, 0);
     lcd.print(_buffer);
@@ -46,7 +47,7 @@ void setup()
 {
     lcd.init();
     lcd.backlight();
-    //pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(LED_PIN, OUTPUT);
     sreg.init(1000, 9, 8, 7);
     counter.init(&sreg, 3, 4, 5, 6);
     counter.start();
@@ -59,7 +60,7 @@ void loop()
 {
     if (counter.triggered == 1)
     {
-        //digitalWrite(LED_BUILTIN, HIGH);
+        digitalWrite(LED_PIN, HIGH);
         now = counter.read();
         uint32_t diff = now - last;
         last = now;
@@ -67,7 +68,7 @@ void loop()
         printFreq(diff);
 
         counter.triggered = 0;
-        //digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(LED_PIN, LOW);
     }
 }
 
