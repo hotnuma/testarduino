@@ -4,68 +4,70 @@
 #include "shiftreg.h"
 #include "math.h"
 
+#define BLANKLINE "                "
 #define NCHARS 16
+#define MAXCOUNT 500000000
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, NCHARS, 2);
 ShiftRegIC sreg;
-char buffer[NCHARS + 1] = {0};
-char line[NCHARS + 1] = {0};
+char _buffer[NCHARS + 1] = {0};
 
-void formatFreq(char *result, uint32_t freq)
+void printFreq(uint32_t freq)
 {
-    if (freq > 500000000)
-    {
-        *result = '\0';
+    if (freq > MAXCOUNT)
         return;
-    }
 
+    strcpy(_buffer, BLANKLINE);
+    
     char temp[NCHARS + 1];
-    ltoa(freq, temp, 10);
-    char *p = temp;
+    ultoa(freq, temp, 10);
     uint8_t len = strlen(temp);
+    if (len < 1 || len > 8)
+        return;
+    
+    uint8_t pos = 13 - len - ((len - 1) / 3);
+    char *dest = _buffer + pos;
+    char *src = temp;
     
     for (uint8_t i = 0; i < len; ++i)
     {
-        *result++ = *p++;
+        *dest++ = *src++;
         
-        if ((len - i - 1) % 3 == 0 && i < len-1)
-            *result++ = ' ';
+        if (((len-1-i) % 3) == 0 && (i < len-1))
+            *dest++ = ' ';
     }
-
-    *result++ = 0;
+    memcpy(_buffer + 13, "  C", 3);
+    
+    lcd.setCursor(0, 0);
+    lcd.print(_buffer);
 }
 
 void setup()
 {
     lcd.init();
     lcd.backlight();
+    //pinMode(LED_BUILTIN, OUTPUT);
     sreg.init(1000, 9, 8, 7);
     counter.init(&sreg, 3, 4, 5, 6);
     counter.start();
 }
 
+uint32_t last = 0;
+uint32_t now = 0;
+
 void loop()
 {
-    static uint32_t last;
-    static uint32_t now;
-    static uint32_t diff;
-    static uint32_t count = 0;
-
     if (counter.triggered == 1)
     {
+        //digitalWrite(LED_BUILTIN, HIGH);
         now = counter.read();
-        diff = now - last;
+        uint32_t diff = now - last;
         last = now;
-
-        //lcd.clear();
-        lcd.setCursor(0, 0);
-        strcpy(line, "                ");
-        formatFreq(buffer, diff);
-        uint8_t pos = 14 - strlen(buffer);
-        strcpy(line + pos, buffer);
-        lcd.print(line);
         
+        printFreq(diff);
+
         counter.triggered = 0;
+        //digitalWrite(LED_BUILTIN, LOW);
     }
 }
 

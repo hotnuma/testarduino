@@ -57,8 +57,6 @@ void CounterIC::start(uint8_t period)
 ISR(INT0_vect)
 {
     counter.triggered = 1;
-    
-    //digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 }
 
 uint32_t CounterIC::read()
