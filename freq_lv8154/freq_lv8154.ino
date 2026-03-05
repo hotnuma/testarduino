@@ -13,6 +13,25 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, NCHARS, 2);
 ShiftRegIC sreg;
 char _buffer[NCHARS + 1] = {0};
 
+void bufclear(char *dest)
+{
+    strcpy(dest, BLANKLINE);
+}
+
+bool bufcpy(char *dest, char *src, uint8_t pos)
+{
+    uint8_t len = strlen(src);
+    if (len + pos > NCHARS)
+        return false;
+    
+    dest += pos;
+    
+    while (*src != '\0')
+        *dest++ = *src++;
+    
+    return true;
+}
+
 void printFreq(uint32_t freq)
 {
     if (freq > MAXCOUNT)
