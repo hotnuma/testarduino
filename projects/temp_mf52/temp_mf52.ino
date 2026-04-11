@@ -1,11 +1,11 @@
 #include <Adafruit_SSD1306.h>
 
 #define BUFFSIZE 5
+
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
 uint16_t buff[BUFFSIZE] = {0};
 int index = 0;
 uint16_t sum = 0;
-
-Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
 void setup()
 {
@@ -34,6 +34,8 @@ double calcTemp(double adc)
     return T - 273.15;
 }
 
+double temp;
+
 void loop()
 {
     sum = sum - buff[index];
@@ -41,7 +43,7 @@ void loop()
     sum = sum + buff[index];
     index = (index+1) % BUFFSIZE;
 
-    double temp = calcTemp((uint16_t) sum / BUFFSIZE);
+    temp = calcTemp((uint16_t) sum / BUFFSIZE);
 
     display.clearDisplay();
 
@@ -53,7 +55,9 @@ void loop()
     display.print(temp);
     display.println(" C");
     
-    display.print(analogRead(A1));
+    display.setCursor(64, 32);
+    temp = (double) analogRead(A1) * 5.0 / 1024;
+    display.print(temp);
     display.display();
     
     delay(500);
