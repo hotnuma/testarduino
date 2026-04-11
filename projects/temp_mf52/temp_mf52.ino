@@ -10,6 +10,7 @@ uint16_t sum = 0;
 void setup()
 {
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+    display.clearDisplay();
     display.display();
 
     for (int i = 0; i < BUFFSIZE; ++i)
@@ -34,8 +35,6 @@ double calcTemp(double adc)
     return T - 273.15;
 }
 
-double temp;
-
 void loop()
 {
     sum = sum - buff[index];
@@ -43,21 +42,26 @@ void loop()
     sum = sum + buff[index];
     index = (index+1) % BUFFSIZE;
 
-    temp = calcTemp((uint16_t) sum / BUFFSIZE);
+    double temp = calcTemp((uint16_t) sum / BUFFSIZE);
 
     display.clearDisplay();
 
     display.setTextSize(2);
     display.setTextColor(WHITE);
     
-    display.setCursor(5, 5);
+    display.setCursor(4, 4);
     display.print("Te ");
     display.print(temp);
     display.println(" C");
     
-    display.setCursor(64, 32);
-    temp = (double) analogRead(A1) * 5.0 / 1024;
-    display.print(temp);
+    int level = round((analogRead(A1) - 409) / 16);
+    if (level < 0)
+        level = 0;
+    else if (level > 5)
+        level = 5;
+    display.setCursor(110, 32);
+    display.print(level);
+    
     display.display();
     
     delay(500);
