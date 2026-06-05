@@ -6,21 +6,12 @@ bool detected = false;
 
 void setup()
 {
-    delay(500);
-    
+    delay(100);
     detected = tx.detectDevice();
-    
     if (!detected)
         return;
     
-    tx.setup(1,
-             false,
-             false,
-             // PreEmphasis = 75
-             1,
-             // digital clock
-             1);
-
+    tx.setup(1, false, false, 0, 1);
     tx.setTX(FREQUENCY);
     tx.setPAC(56);
 }
